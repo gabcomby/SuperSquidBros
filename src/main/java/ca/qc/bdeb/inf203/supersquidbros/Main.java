@@ -1,5 +1,6 @@
 package ca.qc.bdeb.inf203.supersquidbros;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -11,8 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -22,6 +21,9 @@ public class Main extends Application {
 
     public static final double HEIGHT = 480;
     public static final double WIDTH = 350;
+    private boolean jeuEnPause = false;
+    private AnimationTimer timer;
+    private Partie partie;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -43,10 +45,9 @@ public class Main extends Application {
         rootClassement.getChildren().add(retourMenu);
 
         Pane rootPartie = genererMenuBackground();
-        Text text = new Text("UwU");
-        text.setFont(Font.font(70));
-        text.setLayoutX(120);text.setLayoutY(350);
-        rootPartie.getChildren().add(text);
+        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        GraphicsContext context = canvas.getGraphicsContext2D();
+        rootPartie.getChildren().add(canvas);
 
         Scene scenePartie = new Scene(rootPartie, WIDTH, HEIGHT);
         Scene sceneClassement = new Scene(rootClassement, WIDTH, HEIGHT);
@@ -62,11 +63,37 @@ public class Main extends Application {
 
         jouer.setOnAction((e) -> {
             stage.setScene(scenePartie);
+            partie = new Partie();
+            timer.start();
         });
 
         retourMenu.setOnAction((e) -> {
             stage.setScene(sceneMenu);
         });
+
+        scenePartie.setOnKeyReleased((e) -> {
+            Input.setKeyPressed(e.getCode(), false);
+        });
+
+        scenePartie.setOnKeyPressed((e) -> {
+            Input.setKeyPressed(e.getCode(), true);
+        });
+
+        timer = new AnimationTimer() {
+            private long lastTime = 0;
+            @Override
+            public void handle(long now) {
+                if (lastTime == 0) {
+                    lastTime = now;
+                    return;
+                }
+                double deltaTime = (now - lastTime) * 1e-9;
+                partie.update(deltaTime);
+                context.clearRect(0, 0, WIDTH, HEIGHT);
+                partie.draw(context);
+                lastTime = now;
+            }
+        };
 
         stage.setTitle("Super Squid Bros");
         stage.setScene(sceneMenu);
