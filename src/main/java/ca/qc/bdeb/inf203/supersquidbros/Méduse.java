@@ -79,7 +79,11 @@ public class Méduse extends GameObject {
         if (vy != 0) {
             alreadyInTheAir = true;
         }
+        else if (vy == 0)
+            alreadyInTheAir = false;
+
         if (up && !alreadyInTheAir) {
+            System.out.println("Yes");
             vy = -600;
         }
         vy = vy + (ay * deltaTime);
