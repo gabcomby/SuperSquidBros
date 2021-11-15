@@ -77,7 +77,6 @@ public class Main extends Application {
 
         scenePartie.setOnKeyPressed((e) -> {
             Input.setKeyPressed(e.getCode(), true);
-            System.out.println("Oui!");
         });
 
         timer = new AnimationTimer() {
@@ -92,6 +91,7 @@ public class Main extends Application {
                 partie.update(deltaTime);
                 context.clearRect(0, 0, WIDTH, HEIGHT);
                 partie.draw(context);
+
                 lastTime = now;
             }
         };

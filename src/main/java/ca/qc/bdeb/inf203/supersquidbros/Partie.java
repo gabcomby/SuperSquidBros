@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Partie {
     private Méduse méduse;
+    private Plateforme plateformeTest = new Plateforme(380);
     //private [] plateformes
     private boolean partieEnPause = false;
     private boolean gameOver = false;
@@ -24,6 +25,7 @@ public class Partie {
 
     public void draw(GraphicsContext context) {
         méduse.draw(context);
+        plateformeTest.draw(context);
         //plateformes.draw
     }
 
