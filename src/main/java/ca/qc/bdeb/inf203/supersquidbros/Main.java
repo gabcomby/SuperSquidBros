@@ -77,6 +77,7 @@ public class Main extends Application {
 
         scenePartie.setOnKeyPressed((e) -> {
             Input.setKeyPressed(e.getCode(), true);
+            System.out.println("Oui!");
         });
 
         timer = new AnimationTimer() {
