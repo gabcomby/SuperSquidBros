@@ -15,8 +15,8 @@ public class Partie {
 
     public void update(double deltaTime) {
         if(!partieEnPause) {
-            méduse.update(deltaTime);
             plateformeTest.estEnCollision(méduse);
+            méduse.update(deltaTime);
         }
         //Tester le collisions
         //Bouger la caméra

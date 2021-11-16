@@ -90,24 +90,27 @@ public class Méduse extends GameObject {
         } else
             x = newX;
 
-        if (vy != 0) {
-            alreadyInTheAir = true;
-        }
-        else if (vy == 0)
-            alreadyInTheAir = false;
-
-        if (up && !alreadyInTheAir) {
-            vy = -600;
-        }
-        vy = vy + (ay * deltaTime);
-        double newY = y + (vy * deltaTime);
-        if (newY > Main.HEIGHT - h) {
-            vy = 0;
-        } else if (enCollision) {
+        if(enCollision) {
             vy=0;
             y=hauteurPlateforme;
-        } else if (!enCollision) {
-            y = newY;
+            alreadyInTheAir = false;
+        } else {
+            if (vy == 0) {
+                alreadyInTheAir = false;
+            }
+            else if (vy != 0) {
+                alreadyInTheAir = true;
+            }
+            vy = vy + (ay * deltaTime);
+            double newY = y + (vy * deltaTime);
+            if (newY > Main.HEIGHT - h) {
+                vy = 0;
+            } else {
+                y = newY;
+            }
+        }
+        if (up && !alreadyInTheAir) {
+            vy = -600;
         }
     }
 

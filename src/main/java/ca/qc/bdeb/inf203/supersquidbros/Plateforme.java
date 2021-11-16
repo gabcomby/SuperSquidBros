@@ -1,6 +1,7 @@
 package ca.qc.bdeb.inf203.supersquidbros;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
@@ -27,14 +28,16 @@ public class Plateforme extends GameObject{
     }
 
     public void estEnCollision(Méduse m){
-        if (m.getY()-50 <= this.y && m.getVy()>0 && m.getX()+50>=this.x && m.getX()<=this.x + this.w){
-            m.setHauteurPlateforme(this.y-50);
+        /*
+        * ON A UN BUG ICI, SI ON DESCEND DE LA PLATEFORME MAIS QUE L'ON CHANGE DE DIRECTION POUR ALLER SOUS LA PLATEFORME
+        * TOUT EN TOMBANT, ON REMONTE DESSUS
+        */
+        if (m.getY()+m.getH() >= this.y-1 && m.getVy()>0 && m.getX()+50>=this.x && m.getX()<=this.x + this.w && !m.isEnCollision()){
+            m.setHauteurPlateforme(this.y-m.getH());
             m.setEnCollision(true);
-            m.alreadyInTheAir = false;
         }
         else{
             m.setEnCollision(false);
-            m.alreadyInTheAir = true;
         }
     }
 
