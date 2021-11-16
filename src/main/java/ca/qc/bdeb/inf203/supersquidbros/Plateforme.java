@@ -27,7 +27,7 @@ public class Plateforme extends GameObject{
     }
 
     public void estEnCollision(Méduse m){
-        if (m.getY()-50 <= this.y && m.getVy()>0 && m.getX()>=this.x && m.getX()<=this.x + this.w){
+        if (m.getY()-50 <= this.y && m.getVy()>0 && m.getX()+50>=this.x && m.getX()<=this.x + this.w){
             m.setHauteurPlateforme(this.y-50);
             m.setEnCollision(true);
             m.alreadyInTheAir = false;
