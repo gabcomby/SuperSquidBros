@@ -11,6 +11,8 @@ public class Méduse extends GameObject {
     protected Image imageSquid1Gauche = new Image("meduse1-g.png");
     protected boolean vaADroite = true;
     protected boolean alreadyInTheAir = false;
+    protected boolean enCollision = false;
+    protected double hauteurPlateforme;
 
     public Méduse() {
         this.vx = 0;
@@ -21,6 +23,18 @@ public class Méduse extends GameObject {
         this.h = 50;
         this.y = 200;
         this.x = 175;
+    }
+
+    public void setHauteurPlateforme(double hauteurPlateforme) {
+        this.hauteurPlateforme = hauteurPlateforme;
+    }
+
+    public boolean isEnCollision() {
+        return enCollision;
+    }
+
+    public void setEnCollision(boolean enCollision) {
+        this.enCollision = enCollision;
     }
 
     @Override
@@ -83,17 +97,18 @@ public class Méduse extends GameObject {
             alreadyInTheAir = false;
 
         if (up && !alreadyInTheAir) {
-            System.out.println("Yes");
             vy = -600;
         }
         vy = vy + (ay * deltaTime);
-
-
         double newY = y + (vy * deltaTime);
         if (newY > Main.HEIGHT - h) {
             vy = 0;
-        } else
+        } else if (enCollision) {
+            vy=0;
+            y=hauteurPlateforme;
+        } else if (!enCollision) {
             y = newY;
+        }
     }
 
     private void verifieDirection() {

@@ -16,7 +16,7 @@ public class Partie {
     public void update(double deltaTime) {
         if(!partieEnPause) {
             méduse.update(deltaTime);
-            //plateformes.update
+            plateformeTest.estEnCollision(méduse);
         }
         //Tester le collisions
         //Bouger la caméra
@@ -26,7 +26,6 @@ public class Partie {
     public void draw(GraphicsContext context) {
         méduse.draw(context);
         plateformeTest.draw(context);
-        //plateformes.draw
     }
 
     public boolean isGameOver() {
