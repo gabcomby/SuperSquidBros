@@ -32,16 +32,20 @@ public class Main extends Application {
         ImageView imageViewMenu = new ImageView(imageMenu);
         imageViewMenu.setLayoutY(50);
         Button jouer = new Button("Jouer!");
-        jouer.setLayoutX(150);jouer.setLayoutY(350);
+        jouer.setLayoutX(150);
+        jouer.setLayoutY(350);
         Button classement = new Button("Meilleurs scores");
-        classement.setLayoutX(123);classement.setLayoutY(400);
+        classement.setLayoutX(123);
+        classement.setLayoutY(400);
         Button fermerLeJeu = new Button("Quitter");
-        fermerLeJeu.setLayoutY(450);fermerLeJeu.setLayoutX(147);
-        rootMenu.getChildren().addAll(imageViewMenu,jouer,classement,fermerLeJeu);
+        fermerLeJeu.setLayoutY(450);
+        fermerLeJeu.setLayoutX(147);
+        rootMenu.getChildren().addAll(imageViewMenu, jouer, classement, fermerLeJeu);
 
         Pane rootClassement = genererMenuBackground();
         Button retourMenu = new Button("Retour au menu");
-        retourMenu.setLayoutX(120);retourMenu.setLayoutY(450);
+        retourMenu.setLayoutX(120);
+        retourMenu.setLayoutY(450);
         rootClassement.getChildren().add(retourMenu);
 
         Pane rootPartie = genererMenuBackground();
@@ -81,6 +85,7 @@ public class Main extends Application {
 
         timer = new AnimationTimer() {
             private long lastTime = 0;
+
             @Override
             public void handle(long now) {
                 if (lastTime == 0) {
@@ -101,7 +106,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    private Pane genererMenuBackground () {
+    private Pane genererMenuBackground() {
         Pane rootMenu = new Pane();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext contextMenu = canvas.getGraphicsContext2D();

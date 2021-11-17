@@ -2,7 +2,6 @@ package ca.qc.bdeb.inf203.supersquidbros;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 public class Méduse extends GameObject {
@@ -90,15 +89,14 @@ public class Méduse extends GameObject {
         } else
             x = newX;
 
-        if(enCollision) {
-            vy=0;
-            y=hauteurPlateforme;
+        if (enCollision) {
+            vy = 0;
+            y = hauteurPlateforme;
             alreadyInTheAir = false;
         } else {
             if (vy == 0) {
                 alreadyInTheAir = false;
-            }
-            else if (vy != 0) {
+            } else if (vy != 0) {
                 alreadyInTheAir = true;
             }
             vy = vy + (ay * deltaTime);
