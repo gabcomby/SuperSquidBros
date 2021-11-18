@@ -35,7 +35,7 @@ public class Plateforme extends GameObject {
      * @param m On passe la méduse en paramètre afin d'avoir accès à sa position ainsi que sa largeur & hauteur
      */
     public void estEnCollision(Méduse m) {
-        if (m.getY() + m.getH() >= this.y - 5 && m.getY() + m.getH() <= this.y + 5 && m.getVy() > 0 && m.getX() + 50 >= this.x && m.getX() <= this.x + this.w && !m.isEnCollision()) {
+        if (m.getY() + m.getH() >= this.y - 10 && m.getY() + m.getH() <= this.y + 10 && m.getVy() > 0 && m.getX() + 50 >= this.x && m.getX() <= this.x + this.w && !m.isEnCollision()) {
             this.enCollision = true;
         } else {
             this.enCollision = false;

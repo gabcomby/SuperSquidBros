@@ -1,17 +1,24 @@
 package ca.qc.bdeb.inf203.supersquidbros;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+
+import java.util.ArrayList;
 
 public class Partie {
     private Méduse méduse;
-    private Plateforme plateformeTest = new Plateforme(1);
-    private Plateforme plateformeTest2 = new Plateforme(2);
-    private Plateforme[] plateformes = {plateformeTest, plateformeTest2};
+    private ArrayList<Plateforme> listePlateforme = new ArrayList<>();
     private boolean partieEnPause = false;
     private boolean gameOver = false;
+    private int numeroPlateforme = 1;
 
     public Partie() {
         this.méduse = new Méduse();
+        for(int i = 0; i<4; i++) {
+            Plateforme plateforme = new Plateforme(numeroPlateforme);
+            listePlateforme.add(plateforme);
+            numeroPlateforme++;
+        }
     }
 
     /*TODO :
@@ -24,13 +31,17 @@ public class Partie {
     public void update(double deltaTime) {
         if (!partieEnPause) {
             méduse.setEnCollision(false); //On reset les collisions de la méduse
-            plateformeTest.estEnCollision(méduse); //On update les plateformes pour vérifier si elles sont en collision avec la méduse
-            plateformeTest2.estEnCollision(méduse);
-            for (int i = 0; i < plateformes.length; i++) {
-                if (plateformes[i].isEnCollision()) { //On vérifie quelle est la plateforme la plus élevée qui est en contact avec la méduse
-                    méduse.setEnCollision(true); //On indique que la méduse est en collision
-                    méduse.setHauteurPlateforme(plateformes[i].getY() - méduse.getH());
-                } //On donne la position Y de la plateforme à la méduse
+
+            //On update les plateformes pour vérifier si elles sont en collision avec la méduse
+            for (int i = 0; i< listePlateforme.size(); i++) {
+                listePlateforme.get(i).estEnCollision(méduse);
+            }
+
+            for(int i = 0; i<listePlateforme.size(); i++) {
+                if(listePlateforme.get(i).isEnCollision()) {
+                    méduse.setEnCollision(true);
+                    méduse.setHauteurPlateforme((listePlateforme.get(i).getY()) - méduse.getH());
+                }
             }
             méduse.update(deltaTime);
         }
@@ -38,8 +49,13 @@ public class Partie {
 
     public void draw(GraphicsContext context) {
         méduse.draw(context);
-        plateformeTest.draw(context);
-        plateformeTest2.draw(context);
+        for(int i = 0; i<listePlateforme.size(); i++) {
+            listePlateforme.get(i).draw(context);
+        }
+    }
+
+    private void creerEtEffacerPlateformes () {
+        //À faire une fois que l'on aura une caméra fonctionnelle
     }
 
     public boolean isGameOver() {
