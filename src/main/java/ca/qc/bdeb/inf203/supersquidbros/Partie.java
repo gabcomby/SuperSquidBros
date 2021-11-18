@@ -55,7 +55,13 @@ public class Partie {
     }
 
     private void creerEtEffacerPlateformes () {
-        //À faire une fois que l'on aura une caméra fonctionnelle
+        for(int i = 0; i<listePlateforme.size(); i++) {
+            /*if(plateforme.getY() < camera.getY())
+                listePlateforme.remove(i);
+                Plateforme plateforme = new Plateforme(numeroPlateforme);
+                numeroPlateforme++;
+                listePlateforme.add(plateforme);*/
+        }
     }
 
     public boolean isGameOver() {
