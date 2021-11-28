@@ -37,13 +37,14 @@ public class Méduse extends GameObject {
     }
 
     @Override
-    public void draw(GraphicsContext context) {
+    public void draw(GraphicsContext context, Camera camera) {
         verifieDirection();
+        double yAffichage = camera.calculerYCamera(y);
         if (vaADroite) {
-            context.drawImage(imageSquid1Droite, x, y, w, h);
+            context.drawImage(imageSquid1Droite, x, yAffichage, w, h);
         }
         if (!vaADroite) {
-            context.drawImage(imageSquid1Gauche, x, y, w, h);
+            context.drawImage(imageSquid1Gauche, x, yAffichage, w, h);
         }
     }
 

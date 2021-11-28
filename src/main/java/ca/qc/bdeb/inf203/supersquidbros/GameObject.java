@@ -11,7 +11,7 @@ public abstract class GameObject {
 
     public void update(double deltaTime){
     }
-    public void draw(GraphicsContext context) {
+    public void draw(GraphicsContext context, Camera camera) {
     }
 
     public double getVx() {

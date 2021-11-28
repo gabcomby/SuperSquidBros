@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
 
 public class Partie {
+    private Camera camera = new Camera();
     private Méduse méduse;
     private ArrayList<Plateforme> listePlateforme = new ArrayList<>();
     private boolean partieEnPause = false;
@@ -44,23 +45,27 @@ public class Partie {
                 }
             }
             méduse.update(deltaTime);
+            camera.update(deltaTime);
+            creerEtEffacerPlateformes();
         }
     }
 
     public void draw(GraphicsContext context) {
-        méduse.draw(context);
+        méduse.draw(context, camera);
         for(int i = 0; i<listePlateforme.size(); i++) {
-            listePlateforme.get(i).draw(context);
+            listePlateforme.get(i).draw(context, camera);
         }
     }
 
     private void creerEtEffacerPlateformes () {
         for(int i = 0; i<listePlateforme.size(); i++) {
-            /*if(plateforme.getY() < camera.getY())
+            double yCamera = camera.calculerYCamera(listePlateforme.get(i).getY());
+            if(yCamera > Main.HEIGHT) {
                 listePlateforme.remove(i);
                 Plateforme plateforme = new Plateforme(numeroPlateforme);
+                listePlateforme.add(plateforme);
                 numeroPlateforme++;
-                listePlateforme.add(plateforme);*/
+            }
         }
     }
 

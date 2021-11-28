@@ -24,9 +24,10 @@ public class Plateforme extends GameObject {
     }
 
     @Override
-    public void draw(GraphicsContext context) {
+    public void draw(GraphicsContext context, Camera camera) {
+        double yCamera = camera.calculerYCamera(y);
         context.setFill(couleur);
-        context.fillRect(x, y, w, h);
+        context.fillRect(x, yCamera, w, h);
     }
 
     /**
