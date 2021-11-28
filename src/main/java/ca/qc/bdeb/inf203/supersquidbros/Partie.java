@@ -47,6 +47,7 @@ public class Partie {
             méduse.update(deltaTime);
             camera.update(deltaTime);
             creerEtEffacerPlateformes();
+            verifierGameOver();
         }
     }
 
@@ -58,6 +59,12 @@ public class Partie {
     }
 
     private void creerEtEffacerPlateformes () {
+        double yCameraPlateformeEnHaut = camera.calculerYCamera(listePlateforme.get(3).getY());
+        if(yCameraPlateformeEnHaut >= 100) {
+            Plateforme plateforme = new Plateforme(numeroPlateforme);
+            listePlateforme.add(plateforme);
+            numeroPlateforme++;
+        }
         for(int i = 0; i<listePlateforme.size(); i++) {
             double yCamera = camera.calculerYCamera(listePlateforme.get(i).getY());
             if(yCamera > Main.HEIGHT) {
@@ -67,6 +74,12 @@ public class Partie {
                 numeroPlateforme++;
             }
         }
+    }
+
+    private void verifierGameOver() {
+        double yCameraMeduse = camera.calculerYCamera(méduse.getY());
+        if(yCameraMeduse > Main.HEIGHT)
+            gameOver = true;
     }
 
     public boolean isGameOver() {

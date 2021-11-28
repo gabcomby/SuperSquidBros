@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -93,10 +94,13 @@ public class Main extends Application {
                     return;
                 }
                 double deltaTime = (now - lastTime) * 1e-9;
-                partie.update(deltaTime);
+                if(!partie.isGameOver()) {
+                    partie.update(deltaTime);
+                } else {
+                    //CHANGER DE SCÈNE VERS LA SCÈNE DE GAME OVER
+                }
                 context.clearRect(0, 0, WIDTH, HEIGHT);
                 partie.draw(context);
-
                 lastTime = now;
             }
         };
