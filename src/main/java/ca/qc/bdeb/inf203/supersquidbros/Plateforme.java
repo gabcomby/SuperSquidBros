@@ -9,9 +9,11 @@ import java.util.Random;
 
 public class Plateforme extends GameObject {
 
-    private boolean enCollision;
-    private Color couleur;
-    private Random rnd = new Random();
+    protected boolean enCollision;
+    protected Color couleur;
+    protected Random rnd = new Random();
+    protected int vx;
+    protected int vy;
 
     public Plateforme(int numPlateforme) {
         genererPlateforme(numPlateforme);
@@ -36,7 +38,8 @@ public class Plateforme extends GameObject {
      * @param m On passe la méduse en paramètre afin d'avoir accès à sa position ainsi que sa largeur & hauteur
      */
     public void estEnCollision(Méduse m) {
-        if (m.getY() + m.getH() >= this.y - 10 && m.getY() + m.getH() <= this.y + 10 && m.getVy() > 0 && m.getX() + 50 >= this.x && m.getX() <= this.x + this.w && !m.isEnCollision()) {
+        if (m.getY() + m.getH() >= this.y - 10 && m.getY() + m.getH() <= this.y + 10 && m.getVy() > 0 && m.getX() + 50
+                >= this.x && m.getX() <= this.x + this.w && !m.isEnCollision()) {
             this.enCollision = true;
         } else {
             this.enCollision = false;
@@ -54,6 +57,8 @@ public class Plateforme extends GameObject {
         this.h = 10;
         this.x = setX();
         this.y = Main.HEIGHT - (numPlateforme * 100);
+        this.vx = 0;
+        this.vy = 0;
     }
 
     /**
@@ -68,5 +73,7 @@ public class Plateforme extends GameObject {
         int limite1 = (int) limite;
         int posX = rnd.nextInt(limite1);
         return posX;
+    }
+    public void update(double deltaTime, Méduse m){
     }
 }
