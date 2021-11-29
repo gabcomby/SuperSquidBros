@@ -2,6 +2,7 @@ package ca.qc.bdeb.inf203.supersquidbros;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ public class Partie {
     private boolean partieEnPause = false;
     private boolean gameOver = false;
     private int numeroPlateforme = 1;
+    private double scoreDeLaPartie = 0;
 
     public Partie() {
         this.méduse = new Méduse();
@@ -23,8 +25,6 @@ public class Partie {
     }
 
     /*TODO :
-     *  Créer la caméra
-     *  Déplacer la caméra
      *  Créer un compteur de score en fonction de la caméra
      *  Vérifier si la tête de la méduse est en dessous de la caméra
      *  Créer une méthode pour créer et effacer des plateformes en temps réel*/
@@ -45,7 +45,11 @@ public class Partie {
                 }
             }
             méduse.update(deltaTime);
-            camera.update(deltaTime);
+            double positionNégative = méduse.getY() - 430;
+            if(Math.abs(positionNégative) > scoreDeLaPartie) {
+                scoreDeLaPartie = Math.abs(positionNégative);
+            }
+            camera.update(deltaTime, méduse);
             creerEtEffacerPlateformes();
             verifierGameOver();
         }
@@ -88,5 +92,9 @@ public class Partie {
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public double getScoreDeLaPartie() {
+        return scoreDeLaPartie;
     }
 }

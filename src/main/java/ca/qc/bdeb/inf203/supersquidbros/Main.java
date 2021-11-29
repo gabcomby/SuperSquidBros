@@ -3,6 +3,7 @@ package ca.qc.bdeb.inf203.supersquidbros;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,7 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -25,6 +28,7 @@ public class Main extends Application {
     private boolean jeuEnPause = false;
     private AnimationTimer timer;
     private Partie partie;
+    protected Text scoreDeLaPartie = new Text("0");
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -44,15 +48,20 @@ public class Main extends Application {
         rootMenu.getChildren().addAll(imageViewMenu, jouer, classement, fermerLeJeu);
 
         Pane rootClassement = genererMenuBackground();
+        Text textGameOver = new Text("Game Over");
+        rootClassement.getChildren().add(textGameOver);
         Button retourMenu = new Button("Retour au menu");
         retourMenu.setLayoutX(120);
         retourMenu.setLayoutY(450);
         rootClassement.getChildren().add(retourMenu);
 
-        Pane rootPartie = genererMenuBackground();
+        StackPane rootPartie = genererMenuBackground2();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
         rootPartie.getChildren().add(canvas);
+        scoreDeLaPartie.setFont(Font.font(50));
+        rootPartie.setAlignment(scoreDeLaPartie, Pos.TOP_CENTER);
+        rootPartie.getChildren().add(scoreDeLaPartie);
 
         Scene scenePartie = new Scene(rootPartie, WIDTH, HEIGHT);
         Scene sceneClassement = new Scene(rootClassement, WIDTH, HEIGHT);
@@ -69,6 +78,7 @@ public class Main extends Application {
         jouer.setOnAction((e) -> {
             stage.setScene(scenePartie);
             partie = new Partie();
+            scoreDeLaPartie.setText(String.valueOf(partie.getScoreDeLaPartie()) + " px");
             timer.start();
         });
 
@@ -96,8 +106,10 @@ public class Main extends Application {
                 double deltaTime = (now - lastTime) * 1e-9;
                 if(!partie.isGameOver()) {
                     partie.update(deltaTime);
+                    scoreDeLaPartie.setText(String.valueOf(Math.abs(Math.round(partie.getScoreDeLaPartie()))) + " px");
                 } else {
-                    //CHANGER DE SCÈNE VERS LA SCÈNE DE GAME OVER
+                    stage.setScene(sceneClassement);
+                    timer.stop();
                 }
                 context.clearRect(0, 0, WIDTH, HEIGHT);
                 partie.draw(context);
@@ -119,5 +131,24 @@ public class Main extends Application {
         contextMenu.fillRect(0, 0, WIDTH, HEIGHT);
         rootMenu.getChildren().add(canvas);
         return rootMenu;
+    }
+
+    private StackPane genererMenuBackground2() {
+        StackPane rootMenu = new StackPane();
+        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        GraphicsContext contextMenu = canvas.getGraphicsContext2D();
+        Color bleu = Color.rgb(0, 0, 139);
+        contextMenu.setFill(bleu);
+        contextMenu.fillRect(0, 0, WIDTH, HEIGHT);
+        rootMenu.getChildren().add(canvas);
+        return rootMenu;
+    }
+
+    public Text getScoreDeLaPartie() {
+        return scoreDeLaPartie;
+    }
+
+    public void setScoreDeLaPartie(Text scoreDeLaPartie) {
+        this.scoreDeLaPartie = scoreDeLaPartie;
     }
 }

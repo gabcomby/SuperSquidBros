@@ -20,8 +20,8 @@ public class Méduse extends GameObject {
         this.ay = 1200;
         this.w = 50;
         this.h = 50;
-        this.y = 200;
-        this.x = 175;
+        this.y = Main.HEIGHT - h;
+        this.x = Main.WIDTH/2;
     }
 
     public void setHauteurPlateforme(double hauteurPlateforme) {
