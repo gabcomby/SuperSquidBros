@@ -182,6 +182,7 @@ public class Main extends Application {
                 String nom = tab[0];
                 String score = tab[1];
                 listeScore.getItems().add("#1 -- " + nom + " -- " + score);
+                ligne = highscoreReader.readLine();
             }
             highscoreReader.close();
         } catch (java.io.IOException e) {
