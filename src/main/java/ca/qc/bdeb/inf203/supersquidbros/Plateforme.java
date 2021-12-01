@@ -11,7 +11,6 @@ public class Plateforme extends GameObject {
 
     protected boolean enCollision;
     protected Color couleur;
-    protected Random rnd = new Random();
     protected int vx;
     protected int vy;
 

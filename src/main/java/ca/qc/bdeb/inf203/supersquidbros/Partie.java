@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Partie {
     private Camera camera = new Camera();

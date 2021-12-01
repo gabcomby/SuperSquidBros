@@ -4,10 +4,18 @@ import javafx.scene.paint.Color;
 
 public class PlateformeRouge extends Plateforme {
     private double tempsEcoulé;
+    private double facteurRand1;
+    private double facteurRand2;
     public PlateformeRouge(int numPlateforme) {
         super(numPlateforme);
         this.couleur = Color.rgb(184, 15, 36);
         this.tempsEcoulé = 0;
+        if(rnd.nextInt(3) == 1){
+            this.facteurRand1 = -1;
+        }else{
+            this.facteurRand1 = 1;
+        }
+        facteurRand2 = rnd.nextDouble()+0.5;
     }
 
     @Override

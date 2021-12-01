@@ -2,12 +2,15 @@ package ca.qc.bdeb.inf203.supersquidbros;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Random;
+
 public abstract class GameObject {
     protected double vx, vy;
     protected double ax, ay;
     protected double w, h;
     protected double y;
     protected double x;
+    protected Random rnd = new Random();
 
     public void update(double deltaTime){
     }
