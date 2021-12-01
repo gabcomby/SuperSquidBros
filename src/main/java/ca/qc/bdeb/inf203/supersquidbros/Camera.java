@@ -18,6 +18,14 @@ public class Camera {
         }
     }
 
+    public void setVy(double vy) {
+        this.vy = vy;
+    }
+
+    public void setyCaméra(double yCaméra) {
+        this.yCaméra = yCaméra;
+    }
+
     public double calculerYCamera(double yPhysique) {
         return yPhysique - yCaméra;
     }

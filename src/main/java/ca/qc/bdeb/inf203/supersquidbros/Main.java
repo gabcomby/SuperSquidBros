@@ -24,6 +24,8 @@ import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -40,7 +42,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Pane rootMenu = genererMenuBackground();
+        Pane rootMenu = genererMenuBackgroundPane();
         Image imageMenu = new Image("accueil.png");
         ImageView imageViewMenu = new ImageView(imageMenu);
         imageViewMenu.setLayoutY(50);
@@ -70,7 +72,7 @@ public class Main extends Application {
         Button retourMenu = new Button("Retour au menu");
         rootClassement.getChildren().addAll(meilleursScore, listeScore, entrerNom, retourMenu);
 
-        StackPane rootPartie = genererMenuBackground2();
+        StackPane rootPartie = genererMenuBackgroundStackPane();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext context = canvas.getGraphicsContext2D();
         rootPartie.getChildren().add(canvas);
@@ -128,6 +130,7 @@ public class Main extends Application {
                     partie.update(deltaTime);
                     scoreDeLaPartie.setText(String.valueOf(Math.abs(Math.round(partie.getScoreDeLaPartie()))) + " px");
                 } else {
+                    lireFichier();
                     stage.setScene(sceneClassement);
                     timer.stop();
                 }
@@ -142,7 +145,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    private Pane genererMenuBackground() {
+    private Pane genererMenuBackgroundPane() {
         Pane rootMenu = new Pane();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext contextMenu = canvas.getGraphicsContext2D();
@@ -153,7 +156,7 @@ public class Main extends Application {
         return rootMenu;
     }
 
-    private StackPane genererMenuBackground2() {
+    private StackPane genererMenuBackgroundStackPane() {
         StackPane rootMenu = new StackPane();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext contextMenu = canvas.getGraphicsContext2D();
@@ -174,6 +177,8 @@ public class Main extends Application {
 
     private void lireFichier () {
         try {
+            ArrayList<Integer>scoresNumériques = new ArrayList<>();
+            ArrayList<String>listeDeNoms = new ArrayList<>();
             String [] tab;
             BufferedReader highscoreReader = new BufferedReader(new FileReader("highscores.txt"));
             String ligne = highscoreReader.readLine();
@@ -181,12 +186,21 @@ public class Main extends Application {
                 tab = ligne.split(";");
                 String nom = tab[0];
                 String score = tab[1];
-                listeScore.getItems().add("#1 -- " + nom + " -- " + score);
+                int scoreLu = Integer.parseInt(score);
+                scoresNumériques.add(scoreLu);
+                Collections.sort(scoresNumériques);
+                Collections.reverse(scoresNumériques);
+                listeDeNoms.add(scoresNumériques.indexOf(scoreLu), nom);
                 ligne = highscoreReader.readLine();
             }
             highscoreReader.close();
+            for(int i = 0; i<scoresNumériques.size(); i++) {
+                int position = i+1;
+                listeScore.getItems().add("#" + position + " -- " + listeDeNoms.get(i) + " -- " + scoresNumériques.get(i));
+            }
         } catch (java.io.IOException e) {
-            System.out.println("Erreur fichier");
+            System.out.println("Erreur fichier, veuillez vérifier que le fichier highscores.txt n'a pas été supprimé.");
+            System.exit(1);
         }
     }
 }

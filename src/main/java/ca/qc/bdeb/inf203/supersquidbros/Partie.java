@@ -1,9 +1,6 @@
 package ca.qc.bdeb.inf203.supersquidbros;
 
-import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.text.Text;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,9 +15,12 @@ public class Partie {
 
     public Partie() {
         this.méduse = new Méduse();
+        camera.setyCaméra(0);
+        camera.setVy(0);
         for(int i = 0; i<4; i++) {
             creerPlateforme();
             numeroPlateforme++;
+            System.out.println(numeroPlateforme);
         }
     }
 
@@ -74,7 +74,7 @@ public class Partie {
 
     private void creerEtEffacerPlateformes () {
         double yCameraPlateformeEnHaut = camera.calculerYCamera(listePlateforme.get(3).getY());
-        if(yCameraPlateformeEnHaut >= 100) {
+        if(yCameraPlateformeEnHaut >= 100 && listePlateforme.size() == 4) {
             creerPlateforme();
             numeroPlateforme++;
         }
