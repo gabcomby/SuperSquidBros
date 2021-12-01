@@ -18,8 +18,7 @@ public class Partie {
     public Partie() {
         this.méduse = new Méduse();
         for(int i = 0; i<4; i++) {
-            Plateforme plateforme = new Plateforme(numeroPlateforme);
-            listePlateforme.add(plateforme);
+            creerPlateforme();
             numeroPlateforme++;
         }
     }
@@ -40,11 +39,21 @@ public class Partie {
 
             for(int i = 0; i<listePlateforme.size(); i++) {
                 if(listePlateforme.get(i).isEnCollision()) {
-                    méduse.setEnCollision(true);
-                    méduse.setHauteurPlateforme((listePlateforme.get(i).getY()) - méduse.getH());
+                    if(listePlateforme.get(i) instanceof PlateformeVerte) {
+                        méduse.setEnCollision(false);
+                        méduse.setSurPlateformeVerte(true);
+                    }
+                    else {
+                        méduse.setEnCollision(true);
+                        méduse.setSurPlateformeVerte(false);
+                        méduse.setHauteurPlateforme((listePlateforme.get(i).getY()) - méduse.getH());
+                    }
                 }
             }
             méduse.update(deltaTime);
+            for(int i = 0; i<listePlateforme.size(); i++) {
+                listePlateforme.get(i).update(deltaTime, méduse);
+            }
             double positionNégative = méduse.getY() - 430;
             if(Math.abs(positionNégative) > scoreDeLaPartie) {
                 scoreDeLaPartie = Math.abs(positionNégative);
@@ -65,16 +74,14 @@ public class Partie {
     private void creerEtEffacerPlateformes () {
         double yCameraPlateformeEnHaut = camera.calculerYCamera(listePlateforme.get(3).getY());
         if(yCameraPlateformeEnHaut >= 100) {
-            Plateforme plateforme = new Plateforme(numeroPlateforme);
-            listePlateforme.add(plateforme);
+            creerPlateforme();
             numeroPlateforme++;
         }
         for(int i = 0; i<listePlateforme.size(); i++) {
             double yCamera = camera.calculerYCamera(listePlateforme.get(i).getY());
             if(yCamera > Main.HEIGHT) {
                 listePlateforme.remove(i);
-                Plateforme plateforme = new Plateforme(numeroPlateforme);
-                listePlateforme.add(plateforme);
+                creerPlateforme();
                 numeroPlateforme++;
             }
         }
@@ -96,5 +103,37 @@ public class Partie {
 
     public double getScoreDeLaPartie() {
         return scoreDeLaPartie;
+    }
+
+    private int pourcentagePlateformes() {
+        Random rnd = new Random();
+        int chiffreAleatoire = rnd.nextInt(101);
+        int idPlateforme = 0;
+        if(chiffreAleatoire <= 50) {
+            idPlateforme = 1;
+        } else if (chiffreAleatoire <= 70) {
+            idPlateforme = 2;
+        } else if (chiffreAleatoire <= 85) {
+            idPlateforme = 3;
+        } else {
+            idPlateforme = 4;
+        }
+        return idPlateforme;
+    }
+
+    private void creerPlateforme () {
+        Plateforme plateforme;
+        switch (pourcentagePlateformes()) {
+            case 1 -> plateforme = new Plateforme(numeroPlateforme);
+            case 2 -> plateforme = new PlateformeRouge(numeroPlateforme);
+            case 3 -> plateforme = new PlateformeVerte(numeroPlateforme);
+            case 4 -> plateforme = new PlateformeNoire(numeroPlateforme);
+            default -> plateforme = new Plateforme(numeroPlateforme);
+        }
+        listePlateforme.add(plateforme);
+    }
+
+    private void genererBulles(){
+        Random rnd = new Random();
     }
 }

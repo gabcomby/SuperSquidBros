@@ -12,6 +12,7 @@ public class Méduse extends GameObject {
     protected boolean alreadyInTheAir = false;
     protected boolean enCollision = false;
     protected double hauteurPlateforme;
+    protected boolean surPlateformeVerte = false;
 
     public Méduse() {
         this.vx = 0;
@@ -34,6 +35,14 @@ public class Méduse extends GameObject {
 
     public void setEnCollision(boolean enCollision) {
         this.enCollision = enCollision;
+    }
+
+    public boolean isSurPlateformeVerte() {
+        return surPlateformeVerte;
+    }
+
+    public void setSurPlateformeVerte(boolean surPlateformeVerte) {
+        this.surPlateformeVerte = surPlateformeVerte;
     }
 
     @Override
@@ -90,7 +99,7 @@ public class Méduse extends GameObject {
         } else
             x = newX;
 
-        if (enCollision) {
+        if (enCollision && !surPlateformeVerte) {
             vy = 0;
             y = hauteurPlateforme;
             alreadyInTheAir = false;

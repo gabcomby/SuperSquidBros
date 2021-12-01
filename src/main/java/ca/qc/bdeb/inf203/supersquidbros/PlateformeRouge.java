@@ -13,7 +13,15 @@ public class PlateformeRouge extends Plateforme {
     @Override
     public void update(double deltaTime, Méduse m) {
         tempsEcoulé = tempsEcoulé + deltaTime;
-        this.x = x + Math.sin(5 * tempsEcoulé) * 25;
-        super.update(deltaTime);
+        this.x = x + facteurRand1*Math.sin(facteurRand2*tempsEcoulé);
+        if (this.x  < 0){
+            this.x = 0;
+            this.facteurRand1 = facteurRand1 * -1;
+        }
+        else if (this.x + this.w > Main.WIDTH){
+            this.x = Main.WIDTH - this.w;
+            this.facteurRand1 = facteurRand1 * -1;
+        }
+
     }
 }

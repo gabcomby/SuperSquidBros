@@ -8,15 +8,22 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -29,6 +36,7 @@ public class Main extends Application {
     private AnimationTimer timer;
     private Partie partie;
     protected Text scoreDeLaPartie = new Text("0");
+    private ListView listeScore = new ListView();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -47,13 +55,20 @@ public class Main extends Application {
         fermerLeJeu.setLayoutX(147);
         rootMenu.getChildren().addAll(imageViewMenu, jouer, classement, fermerLeJeu);
 
-        Pane rootClassement = genererMenuBackground();
-        Text textGameOver = new Text("Game Over");
-        rootClassement.getChildren().add(textGameOver);
+        VBox rootClassement = new VBox();
+        Text meilleursScore = new Text("Meilleurs score!");
+        meilleursScore.setFont(Font.font(50));
+        HBox entrerNom = new HBox();
+        entrerNom.setAlignment(Pos.CENTER);
+        Text nom = new Text("Nom : ");
+        rootClassement.setAlignment(Pos.CENTER);
+        TextField textField = new TextField();
+        textField.setMaxWidth(320);
+        textField.setMaxHeight(300);
+        Button boutonEnregistrer = new Button("Sauvegarder");
+        entrerNom.getChildren().addAll(nom, textField, boutonEnregistrer);
         Button retourMenu = new Button("Retour au menu");
-        retourMenu.setLayoutX(120);
-        retourMenu.setLayoutY(450);
-        rootClassement.getChildren().add(retourMenu);
+        rootClassement.getChildren().addAll(meilleursScore, listeScore, entrerNom, retourMenu);
 
         StackPane rootPartie = genererMenuBackground2();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
@@ -67,11 +82,16 @@ public class Main extends Application {
         Scene sceneClassement = new Scene(rootClassement, WIDTH, HEIGHT);
         Scene sceneMenu = new Scene(rootMenu, WIDTH, HEIGHT);
 
+        boutonEnregistrer.setOnAction((e) -> {
+            //Mettre une méthode pour stocker les données dans des fichiers
+        });
+
         fermerLeJeu.setOnAction((e) -> {
             Platform.exit();
         });
 
         classement.setOnAction((e) -> {
+            lireFichier();
             stage.setScene(sceneClassement);
         });
 
@@ -150,5 +170,22 @@ public class Main extends Application {
 
     public void setScoreDeLaPartie(Text scoreDeLaPartie) {
         this.scoreDeLaPartie = scoreDeLaPartie;
+    }
+
+    private void lireFichier () {
+        try {
+            String [] tab;
+            BufferedReader highscoreReader = new BufferedReader(new FileReader("highscores.txt"));
+            String ligne = highscoreReader.readLine();
+            while(ligne!=null) {
+                tab = ligne.split(";");
+                String nom = tab[0];
+                String score = tab[1];
+                listeScore.getItems().add("#1 -- " + nom + " -- " + score);
+            }
+            highscoreReader.close();
+        } catch (java.io.IOException e) {
+            System.out.println("Erreur fichier");
+        }
     }
 }
