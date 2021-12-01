@@ -40,6 +40,7 @@ public class Main extends Application {
     private AnimationTimer timer;
     private Partie partie;
     protected Text scoreDeLaPartie = new Text("0");
+    private double scoreDeLaPartiePourFichier = 0;
     private ListView listeScore = new ListView();
 
     @Override
@@ -87,7 +88,8 @@ public class Main extends Application {
         Scene sceneMenu = new Scene(rootMenu, WIDTH, HEIGHT);
 
         boutonEnregistrer.setOnAction((e) -> {
-            //Mettre une méthode pour stocker les données dans des fichiers
+            String nomHighScore = textField.getText();
+            écrireFichier(nomHighScore, (int)scoreDeLaPartiePourFichier);
         });
 
         fermerLeJeu.setOnAction((e) -> {
@@ -102,7 +104,8 @@ public class Main extends Application {
         jouer.setOnAction((e) -> {
             stage.setScene(scenePartie);
             partie = new Partie();
-            scoreDeLaPartie.setText(String.valueOf(partie.getScoreDeLaPartie()) + " px");
+            scoreDeLaPartie.setText("0 px");
+            scoreDeLaPartiePourFichier = 0;
             timer.start();
         });
 
@@ -130,6 +133,7 @@ public class Main extends Application {
                 double deltaTime = (now - lastTime) * 1e-9;
                 if(!partie.isGameOver()) {
                     partie.update(deltaTime);
+                    scoreDeLaPartiePourFichier = Math.abs(Math.round(partie.getScoreDeLaPartie()));
                     scoreDeLaPartie.setText(String.valueOf(Math.abs(Math.round(partie.getScoreDeLaPartie()))) + " px");
                 } else {
                     lireFichier();
@@ -169,18 +173,11 @@ public class Main extends Application {
         return rootMenu;
     }
 
-    public Text getScoreDeLaPartie() {
-        return scoreDeLaPartie;
-    }
-
-    public void setScoreDeLaPartie(Text scoreDeLaPartie) {
-        this.scoreDeLaPartie = scoreDeLaPartie;
-    }
-
     private void écrireFichier (String nom, int score) {
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter("highscores.txt"));
+            PrintWriter printWriter = new PrintWriter(new FileWriter("highscores.txt", true));
             printWriter.write(nom+";"+score);
+            printWriter.write("\n");
             printWriter.close();
         } catch (java.io.IOException e) {
             System.out.println("Erreur lors de l'écriture du fichier de score!");
@@ -190,6 +187,7 @@ public class Main extends Application {
 
     private void lireFichier () {
         try {
+            listeScore.getItems().clear();
             ArrayList<Integer>scoresNumériques = new ArrayList<>();
             ArrayList<String>listeDeNoms = new ArrayList<>();
             String [] tab;

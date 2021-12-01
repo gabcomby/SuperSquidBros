@@ -11,7 +11,6 @@ public class Partie {
     private boolean partieEnPause = false;
     private boolean gameOver = false;
     private int numeroPlateforme = 1;
-    private double scoreDeLaPartie = 0;
 
     public Partie() {
         this.méduse = new Méduse();
@@ -20,7 +19,6 @@ public class Partie {
         for(int i = 0; i<4; i++) {
             creerPlateforme();
             numeroPlateforme++;
-            System.out.println(numeroPlateforme);
         }
     }
 
@@ -56,10 +54,6 @@ public class Partie {
                 listePlateforme.get(i).update(deltaTime, méduse);
             }
             camera.update(deltaTime, méduse);
-            double positionCamera = camera.getyCaméra();
-            if(Math.abs(positionCamera) > scoreDeLaPartie) {
-                scoreDeLaPartie = Math.abs(positionCamera);
-            }
             creerEtEffacerPlateformes();
             verifierGameOver();
         }
@@ -99,7 +93,7 @@ public class Partie {
     }
 
     public double getScoreDeLaPartie() {
-        return scoreDeLaPartie;
+        return camera.getyCaméra();
     }
 
     private int pourcentagePlateformes() {
