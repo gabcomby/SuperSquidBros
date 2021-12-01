@@ -98,10 +98,6 @@ public class Partie {
         return gameOver;
     }
 
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
     public double getScoreDeLaPartie() {
         return scoreDeLaPartie;
     }

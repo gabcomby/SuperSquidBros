@@ -24,6 +24,8 @@ import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -175,6 +177,17 @@ public class Main extends Application {
         this.scoreDeLaPartie = scoreDeLaPartie;
     }
 
+    private void écrireFichier (String nom, int score) {
+        try {
+            PrintWriter printWriter = new PrintWriter(new FileWriter("highscores.txt"));
+            printWriter.write(nom+";"+score);
+            printWriter.close();
+        } catch (java.io.IOException e) {
+            System.out.println("Erreur lors de l'écriture du fichier de score!");
+            System.exit(1);
+        }
+    }
+
     private void lireFichier () {
         try {
             ArrayList<Integer>scoresNumériques = new ArrayList<>();
@@ -199,7 +212,7 @@ public class Main extends Application {
                 listeScore.getItems().add("#" + position + " -- " + listeDeNoms.get(i) + " -- " + scoresNumériques.get(i));
             }
         } catch (java.io.IOException e) {
-            System.out.println("Erreur fichier, veuillez vérifier que le fichier highscores.txt n'a pas été supprimé.");
+            System.out.println("Erreur lors de la lecture du fichier de score!");
             System.exit(1);
         }
     }
