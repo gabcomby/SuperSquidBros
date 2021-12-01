@@ -55,11 +55,11 @@ public class Partie {
             for(int i = 0; i<listePlateforme.size(); i++) {
                 listePlateforme.get(i).update(deltaTime, méduse);
             }
-            double positionNégative = méduse.getY() - 430;
-            if(Math.abs(positionNégative) > scoreDeLaPartie) {
-                scoreDeLaPartie = Math.abs(positionNégative);
-            }
             camera.update(deltaTime, méduse);
+            double positionCamera = camera.getyCaméra();
+            if(Math.abs(positionCamera) > scoreDeLaPartie) {
+                scoreDeLaPartie = Math.abs(positionCamera);
+            }
             creerEtEffacerPlateformes();
             verifierGameOver();
         }
