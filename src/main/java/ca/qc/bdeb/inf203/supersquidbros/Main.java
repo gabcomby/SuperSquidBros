@@ -44,6 +44,7 @@ public class Main extends Application {
     private double scoreDeLaPartiePourFichier = 0;
     private ListView listeScore = new ListView();
     private double compteurTempsGameOver = 0;
+    private boolean dejaEnregistréScore;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -94,8 +95,12 @@ public class Main extends Application {
         Scene sceneMenu = new Scene(rootMenu, WIDTH, HEIGHT);
 
         boutonEnregistrer.setOnAction((e) -> {
-            String nomHighScore = textField.getText();
-            écrireFichier(nomHighScore, (int)scoreDeLaPartiePourFichier);
+            if(!dejaEnregistréScore) {
+                String nomHighScore = textField.getText();
+                écrireFichier(nomHighScore, (int)scoreDeLaPartiePourFichier);
+                lireFichier();
+                dejaEnregistréScore = true;
+            }
         });
 
         fermerLeJeu.setOnAction((e) -> {
@@ -108,10 +113,11 @@ public class Main extends Application {
         });
 
         jouer.setOnAction((e) -> {
-            stage.setScene(scenePartie);
             partie = new Partie();
             scoreDeLaPartie.setText("0 px");
             scoreDeLaPartiePourFichier = 0;
+            dejaEnregistréScore = false;
+            stage.setScene(scenePartie);
             timer.start();
         });
 
@@ -187,7 +193,7 @@ public class Main extends Application {
 
     private void écrireFichier (String nom, int score) {
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter("highscores.txt", true));
+            PrintWriter printWriter = new PrintWriter(new FileWriter("highscores.txt",true));
             printWriter.write(nom+";"+score);
             printWriter.write("\n");
             printWriter.close();
