@@ -45,6 +45,10 @@ public class Main extends Application {
     private ListView listeScore = new ListView();
     private double compteurTempsGameOver = 0;
     private boolean dejaEnregistréScore;
+    private Text positionMeduse = new Text("Position = (0,0)");
+    private Text vitesseMeduse = new Text("Vitesse = (0,0)");
+    private Text accelerationMeduse = new Text("Acceleration = (0,0)");
+    private Text toucheLeSol = new Text("Touche le sol = oui");
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -83,12 +87,26 @@ public class Main extends Application {
         GraphicsContext context = canvas.getGraphicsContext2D();
         rootPartie.getChildren().add(canvas);
         scoreDeLaPartie.setFont(Font.font(50));
+        scoreDeLaPartie.setFill(Color.WHITE);
+        gameOverText.setFill(Color.WHITE);
         rootPartie.setAlignment(scoreDeLaPartie, Pos.TOP_CENTER);
         rootPartie.setAlignment(gameOverText, Pos.CENTER);
         gameOverText.setOpacity(0);
         gameOverText.setFont(Font.font(60));
         rootPartie.getChildren().add(gameOverText);
         rootPartie.getChildren().add(scoreDeLaPartie);
+        VBox debugModeAffichage = new VBox();
+        positionMeduse.setOpacity(0);
+        positionMeduse.setFill(Color.WHITE);
+        vitesseMeduse.setOpacity(0);
+        vitesseMeduse.setFill(Color.WHITE);
+        accelerationMeduse.setOpacity(0);
+        accelerationMeduse.setFill(Color.WHITE);
+        toucheLeSol.setOpacity(0);
+        toucheLeSol.setFill(Color.WHITE);
+        debugModeAffichage.getChildren().addAll(positionMeduse,vitesseMeduse,accelerationMeduse,toucheLeSol);
+        rootPartie.setAlignment(debugModeAffichage, Pos.TOP_LEFT);
+        rootPartie.getChildren().add(debugModeAffichage);
 
         Scene scenePartie = new Scene(rootPartie, WIDTH, HEIGHT);
         Scene sceneClassement = new Scene(rootClassement, WIDTH, HEIGHT);
@@ -126,11 +144,16 @@ public class Main extends Application {
         });
 
         scenePartie.setOnKeyReleased((e) -> {
-            Input.setKeyPressed(e.getCode(), false);
+                Input.setKeyPressed(e.getCode(), false);
         });
 
         scenePartie.setOnKeyPressed((e) -> {
-            Input.setKeyPressed(e.getCode(), true);
+            if(e.getCode() == KeyCode.T) {
+                partie.setModeDebug(!partie.isModeDebug());
+                e.consume();
+            } else {
+                Input.setKeyPressed(e.getCode(), true);
+            }
         });
 
         timer = new AnimationTimer() {
@@ -145,6 +168,25 @@ public class Main extends Application {
                 double deltaTime = (now - lastTime) * 1e-9;
                 if(!partie.isGameOver()) {
                     partie.update(deltaTime);
+                    if(partie.isModeDebug()) {
+                        positionMeduse.setText("Position = (" + String.valueOf(Math.round(partie.getMéduse().getX()))
+                                + " , " + String.valueOf(Math.round(partie.getMéduse().getY())) + ")");
+                        vitesseMeduse.setText("Vitesse = (" + String.valueOf(Math.round(partie.getMéduse().getVx())
+                                + " , " + String.valueOf(Math.round(partie.getMéduse().getVy())) + ")"));
+                        accelerationMeduse.setText("Accélération = (" + String.valueOf(Math.round(
+                                partie.getMéduse().getAx())) + " , " + String.valueOf(Math.round(
+                                        partie.getMéduse().getAy())) + ")");
+                        toucheLeSol.setText("Touche le sol = " + partie.getMéduse().isEnCollision());
+                        positionMeduse.setOpacity(100);
+                        vitesseMeduse.setOpacity(100);
+                        accelerationMeduse.setOpacity(100);
+                        toucheLeSol.setOpacity(100);
+                    } else {
+                        positionMeduse.setOpacity(0);
+                        vitesseMeduse.setOpacity(0);
+                        accelerationMeduse.setOpacity(0);
+                        toucheLeSol.setOpacity(0);
+                    }
                     scoreDeLaPartiePourFichier = Math.abs(Math.round(partie.getScoreDeLaPartie()));
                     scoreDeLaPartie.setText(String.valueOf(Math.abs(Math.round(partie.getScoreDeLaPartie()))) + " px");
                 } else {

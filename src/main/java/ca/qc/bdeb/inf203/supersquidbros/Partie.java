@@ -1,6 +1,8 @@
 package ca.qc.bdeb.inf203.supersquidbros;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,11 +15,12 @@ public class Partie {
     private boolean partieEnPause = false;
     private boolean gameOver = false;
     private int numeroPlateforme = 1;
-    private boolean modeDebug;
+    private boolean modeDebug = false;
 
     public Partie() {
         this.gameOver = false;
         this.méduse = new Méduse();
+        this.modeDebug = false;
         genererBulles();
         camera.setyCaméra(0);
         camera.setVy(0);
@@ -25,6 +28,14 @@ public class Partie {
             creerPlateforme();
             numeroPlateforme++;
         }
+    }
+
+    public boolean isModeDebug() {
+        return modeDebug;
+    }
+
+    public void setModeDebug(boolean modeDebug) {
+        this.modeDebug = modeDebug;
     }
 
     /*TODO :
@@ -137,6 +148,7 @@ public class Partie {
             case 4 -> plateforme = new PlateformeNoire(numeroPlateforme);
             default -> plateforme = new Plateforme(numeroPlateforme);
         }
+        plateforme.setEstEnModeDebug(modeDebug);
         listePlateforme.add(plateforme);
     }
 

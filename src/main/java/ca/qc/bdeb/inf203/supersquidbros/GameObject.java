@@ -11,8 +11,15 @@ public abstract class GameObject {
     protected double y;
     protected double x;
     protected Random rnd = new Random();
-    //changer la valeur par défaut
-    protected boolean estEnModeDebug = true;
+    protected boolean estEnModeDebug = false;
+
+    public boolean isEstEnModeDebug() {
+        return estEnModeDebug;
+    }
+
+    public void setEstEnModeDebug(boolean estEnModeDebug) {
+        this.estEnModeDebug = estEnModeDebug;
+    }
 
     public void update(double deltaTime){
     }

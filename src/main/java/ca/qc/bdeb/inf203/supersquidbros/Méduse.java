@@ -38,13 +38,13 @@ public class Méduse extends GameObject {
         this.enCollision = enCollision;
     }
 
-    public boolean isSurPlateformeVerte() {
-        return surPlateformeVerte;
-    }
-
     public void setSurPlateformeVerte(boolean surPlateformeVerte) {
         this.surPlateformeVerte = surPlateformeVerte;
     }
+
+
+
+
 
     @Override
     public void draw(GraphicsContext context, Camera camera) {
