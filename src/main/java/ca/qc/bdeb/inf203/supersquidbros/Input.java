@@ -11,6 +11,11 @@ public class Input {
         return touches.getOrDefault(code, false);
     }
 
+    /**
+     * Méthode pour indiquer qu'une touche est appuyée
+     * @param code Le KeyCode de la touche
+     * @param isPressed True or false
+     */
     public static void setKeyPressed(KeyCode code, boolean isPressed) {
         touches.put(code, isPressed);
     }

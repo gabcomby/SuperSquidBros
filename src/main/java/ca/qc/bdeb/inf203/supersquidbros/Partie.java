@@ -1,5 +1,7 @@
 package ca.qc.bdeb.inf203.supersquidbros;
+
 import javafx.scene.canvas.GraphicsContext;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,7 +21,7 @@ public class Partie {
         this.méduse = new Méduse();
         this.modeDebug = false;
         genererBulles();
-        for(int i = 0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             creerPlateforme();
             numeroPlateforme++;
         }
@@ -33,48 +35,56 @@ public class Partie {
         this.modeDebug = modeDebug;
     }
 
-    /*TODO :
-     *  Créer un compteur de score en fonction de la caméra
-     *  Vérifier si la tête de la méduse est en dessous de la caméra
-     *  Créer une méthode pour créer et effacer des plateformes en temps réel*/
-
+    /**
+     * Méthode pour update la partie
+     * @param deltaTime Le temps écoulé depuis la dernière update
+     */
     public void update(double deltaTime) {
-            enModeDebug();
-            méduse.setEnCollision(false); //On reset les collisions de la méduse
-
-            //On update les plateformes pour vérifier si elles sont en collision avec la méduse
-            for (int i = 0; i< listePlateforme.size(); i++) {
-                listePlateforme.get(i).estEnCollision(méduse);
-            }
-
-            for(int i = 0; i<listePlateforme.size(); i++) {
-                if(listePlateforme.get(i).isEnCollision()) {
-                    if(listePlateforme.get(i) instanceof PlateformeVerte) {
-                        méduse.setEnCollision(false);
-                        méduse.setSurPlateformeVerte(true);
-                    }
-                    else {
-                        méduse.setEnCollision(true);
-                        méduse.setSurPlateformeVerte(false);
-                        méduse.setHauteurPlateforme((listePlateforme.get(i).getY()) - méduse.getH());
-                    }
+        //On vérifie si la partie est en mode debug ou non
+        enModeDebug();
+        //On reset les collisions de la méduse
+        méduse.setEnCollision(false);
+        //On update les plateformes pour vérifier si elles sont en collision avec la méduse
+        for (int i = 0; i < listePlateforme.size(); i++) {
+            listePlateforme.get(i).estEnCollision(méduse);
+        }
+        /*Pour chaque plateforme, on update les collisions de la méduse selon si elles sont en contact ou non*/
+        for (int i = 0; i < listePlateforme.size(); i++) {
+            if (listePlateforme.get(i).isEnCollision()) {
+                //Si c'est une plateforme verte, alors on met enCollision à false
+                if (listePlateforme.get(i) instanceof PlateformeVerte) {
+                    méduse.setEnCollision(false);
+                    méduse.setSurPlateformeVerte(true);
+                }
+                //Si c'est une plateforme normale, on met enCollision à true
+                else {
+                    méduse.setEnCollision(true);
+                    méduse.setSurPlateformeVerte(false);
+                    méduse.setHauteurPlateforme((listePlateforme.get(i).getY()) - méduse.getH());
                 }
             }
-            méduse.update(deltaTime);
-            for(int i = 0; i<listePlateforme.size(); i++) {
-                listePlateforme.get(i).update(deltaTime, méduse);
-            }
-            for (int i = 0; i < tabBulles.size(); i++) {
-                tabBulles.get(i).update(deltaTime);
-            }
-            camera.update(deltaTime, méduse);
-            tempsEcouleBulles = tempsEcouleBulles + deltaTime;
-            creerEtEffacerPlateformes();
-            if (tempsEcouleBulles > 3){
-                genererBulles();
-                tempsEcouleBulles = 0;
-            }
-            verifierGameOver();
+        }
+        méduse.update(deltaTime);
+        //On update toutes les plateformes
+        for (int i = 0; i < listePlateforme.size(); i++) {
+            listePlateforme.get(i).update(deltaTime, méduse);
+        }
+        //On update toutes les bulles
+        for (int i = 0; i < tabBulles.size(); i++) {
+            tabBulles.get(i).update(deltaTime);
+        }
+        //On update la caméra
+        camera.update(deltaTime, méduse);
+        tempsEcouleBulles = tempsEcouleBulles + deltaTime;
+        //On crée et efface les plateformes en temps réel pour ne pas surcharger le programme
+        creerEtEffacerPlateformes();
+        //On génère des nouvelles bulles toutes les 3 secondes
+        if (tempsEcouleBulles > 3) {
+            genererBulles();
+            tempsEcouleBulles = 0;
+        }
+        //On vérifie si la partie est perdue ou non
+        verifierGameOver();
     }
 
     public void draw(GraphicsContext context) {
@@ -82,20 +92,27 @@ public class Partie {
             tabBulles.get(i).draw(context, camera);
         }
         méduse.draw(context, camera);
-        for(int i = 0; i<listePlateforme.size(); i++) {
+        //Dessine les plateformes
+        for (int i = 0; i < listePlateforme.size(); i++) {
             listePlateforme.get(i).draw(context, camera);
         }
     }
 
-    private void creerEtEffacerPlateformes () {
+    /**
+     * Fonction servant à effacer et créer des nouvelles plateformes en temps réel pour ne pas surcharger le programme
+     */
+    private void creerEtEffacerPlateformes() {
+        //On update la position relative à la caméra de la plateforme la plus en haut
         double yCameraPlateformeEnHaut = camera.calculerYCamera(listePlateforme.get(3).getY());
-        if(yCameraPlateformeEnHaut >= 100 && listePlateforme.size() == 4) {
+        //Si il y a 100 pixels ou plus entre le haut de l'écran et la plateforme d'en haut, on en crée une nouvelle
+        if (yCameraPlateformeEnHaut >= 100 && listePlateforme.size() == 4) {
             creerPlateforme();
             numeroPlateforme++;
         }
-        for(int i = 0; i<listePlateforme.size(); i++) {
+        //Si une plateforme n'est plus affichée à l'écran, on la delete et on en crée une nouvelle
+        for (int i = 0; i < listePlateforme.size(); i++) {
             double yCamera = camera.calculerYCamera(listePlateforme.get(i).getY());
-            if(yCamera > Main.HEIGHT) {
+            if (yCamera > Main.HEIGHT) {
                 listePlateforme.remove(i);
                 creerPlateforme();
                 numeroPlateforme++;
@@ -105,7 +122,7 @@ public class Partie {
 
     private void verifierGameOver() {
         double yCameraMeduse = camera.calculerYCamera(méduse.getY());
-        if(yCameraMeduse > Main.HEIGHT)
+        if (yCameraMeduse > Main.HEIGHT)
             gameOver = true;
     }
 
@@ -121,7 +138,7 @@ public class Partie {
         Random rnd = new Random();
         int chiffreAleatoire = rnd.nextInt(101);
         int idPlateforme = 0;
-        if(chiffreAleatoire <= 50) {
+        if (chiffreAleatoire <= 50) {
             idPlateforme = 1;
         } else if (chiffreAleatoire <= 70) {
             idPlateforme = 2;
@@ -133,7 +150,10 @@ public class Partie {
         return idPlateforme;
     }
 
-    private void creerPlateforme () {
+    /**
+     * Crée une plateforme en fonction du chiffre retourné par la méthode pourcentagePlateformes()
+     */
+    private void creerPlateforme() {
         Plateforme plateforme;
         switch (pourcentagePlateformes()) {
             case 1 -> plateforme = new Plateforme(numeroPlateforme);
@@ -146,38 +166,49 @@ public class Partie {
         listePlateforme.add(plateforme);
     }
 
-    private void genererBulles(){
+    /**
+     * Crée 15 bulles séparées en 3 groupes de 5 bulles et les mets dans le tableau tabBulles
+     */
+    private void genererBulles() {
         Random rnd = new Random();
-        double basex1 = rnd.nextInt((int)Main.WIDTH+1);
-        double basex2 = rnd.nextInt((int)Main.WIDTH+1);
-        double basex3 = rnd.nextInt((int)Main.WIDTH+1);
+        //Calcule le x de base des groupes de bulles
+        double basex1 = rnd.nextInt((int) Main.WIDTH + 1);
+        double basex2 = rnd.nextInt((int) Main.WIDTH + 1);
+        double basex3 = rnd.nextInt((int) Main.WIDTH + 1);
         double facteurRand;
         for (int i = 0; i < 5; i++) {
             facteurRand = genererPositifOuNegatif();
-            tabBulles.add(new Bulles(basex1+(facteurRand*rnd.nextInt(21)),camera.getyCaméra() + Main.HEIGHT));
+            tabBulles.add(new Bulles(basex1 + (facteurRand * rnd.nextInt(21)), camera.getyCaméra() + Main.HEIGHT));
         }
         for (int j = 0; j < 5; j++) {
             facteurRand = genererPositifOuNegatif();
-            tabBulles.add(new Bulles(basex2+(facteurRand*rnd.nextInt(21)),camera.getyCaméra() + Main.HEIGHT));
+            tabBulles.add(new Bulles(basex2 + (facteurRand * rnd.nextInt(21)), camera.getyCaméra() + Main.HEIGHT));
         }
         for (int k = 0; k < 5; k++) {
             facteurRand = genererPositifOuNegatif();
-            tabBulles.add(new Bulles(basex3+(facteurRand*rnd.nextInt(21)),camera.getyCaméra() + Main.HEIGHT));
+            tabBulles.add(new Bulles(basex3 + (facteurRand * rnd.nextInt(21)), camera.getyCaméra() + Main.HEIGHT));
         }
     }
 
-    private double genererPositifOuNegatif(){
+    /**
+     * Méthode qui retourne soit +1 soit -1
+     * @return -1 ou +1
+     */
+    private double genererPositifOuNegatif() {
         Random rnd = new Random();
         double facteurRand;
-        if(rnd.nextInt(3) == 1){
+        if (rnd.nextInt(3) == 1) {
             facteurRand = -1;
-        }else {
+        } else {
             facteurRand = 1;
         }
         return facteurRand;
     }
 
-    private void enModeDebug(){
+    /**
+     * Méthode qui update le mode debug de chaque objet présent dans le jeu
+     */
+    private void enModeDebug() {
         méduse.setEstEnModeDebug(modeDebug);
         for (int i = 0; i < listePlateforme.size(); i++) {
             listePlateforme.get(i).setEstEnModeDebug(modeDebug);

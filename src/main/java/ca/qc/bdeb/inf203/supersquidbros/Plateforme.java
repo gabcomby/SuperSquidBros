@@ -22,10 +22,9 @@ public class Plateforme extends GameObject {
 
     @Override
     public void draw(GraphicsContext context, Camera camera) {
-        if (this.estEnModeDebug && this.enCollision){
+        if (this.estEnModeDebug && this.enCollision) {
             context.setFill(Color.YELLOW);
-        }
-        else {
+        } else {
             context.setFill(couleur);
         }
         double yCamera = camera.calculerYCamera(y);
@@ -34,7 +33,6 @@ public class Plateforme extends GameObject {
 
     /**
      * Fonction pour vérifier si une plateforme est en collision avec la méduse
-     *
      * @param m On passe la méduse en paramètre afin d'avoir accès à sa position ainsi que sa largeur & hauteur
      */
     public void estEnCollision(Méduse m) {
@@ -48,7 +46,6 @@ public class Plateforme extends GameObject {
 
     /**
      * Cette fonction génère la plateforme
-     *
      * @param numPlateforme Le numéro de la plateforme permet de s'assurer que les plateformes sont toujours à 100
      *                      pixels les unes au dessus des autres
      */
@@ -63,7 +60,6 @@ public class Plateforme extends GameObject {
 
     /**
      * Cette fonction permet de générer une position x aléatoire pour notre plateforme en tenant compte de sa largeur
-     *
      * @return La position en x de la plateforme
      */
     private int setX() {
@@ -74,6 +70,7 @@ public class Plateforme extends GameObject {
         int posX = rnd.nextInt(limite1);
         return posX;
     }
-    public void update(double deltaTime, Méduse m){
+
+    public void update(double deltaTime, Méduse m) {
     }
 }

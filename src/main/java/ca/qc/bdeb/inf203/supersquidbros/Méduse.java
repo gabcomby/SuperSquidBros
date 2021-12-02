@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 
 public class Méduse extends GameObject {
     private KeyCode left = KeyCode.LEFT, right = KeyCode.RIGHT, up = KeyCode.UP;
+    //On load toutes les images qui servent à faire l'animation de la méduse
     private Image imageSquid1Droite = new Image("meduse1.png");
     private Image imageSquid2Droite = new Image("meduse2.png");
     private Image imageSquid3Droite = new Image("meduse3.png");
@@ -19,10 +20,11 @@ public class Méduse extends GameObject {
     private Image imageSquid4Gauche = new Image("meduse4-g.png");
     private Image imageSquid5Gauche = new Image("meduse5-g.png");
     private Image imageSquid6Gauche = new Image("meduse6-g.png");
-    private Image[] imageDroite = {imageSquid1Droite,imageSquid2Droite,imageSquid3Droite,imageSquid4Droite,
-            imageSquid5Droite,imageSquid6Droite};
-    private Image[] imageGauche = {imageSquid1Gauche,imageSquid2Gauche,imageSquid3Gauche,imageSquid4Gauche,
-            imageSquid5Gauche,imageSquid6Gauche};
+    //On met les images dans des tableaux
+    private Image[] imageDroite = {imageSquid1Droite, imageSquid2Droite, imageSquid3Droite, imageSquid4Droite,
+            imageSquid5Droite, imageSquid6Droite};
+    private Image[] imageGauche = {imageSquid1Gauche, imageSquid2Gauche, imageSquid3Gauche, imageSquid4Gauche,
+            imageSquid5Gauche, imageSquid6Gauche};
 
     private boolean vaADroite = true;
     private boolean alreadyInTheAir = false;
@@ -58,18 +60,20 @@ public class Méduse extends GameObject {
         this.surPlateformeVerte = surPlateformeVerte;
     }
 
-
-
-
-
+    /**
+     * Méthode utilisée pour dessiner la méduse dans le programme
+     * @param context Le GraphicContext sur lequel on dessine
+     * @param camera La caméra du jeu pour pouvoir calculer la position relative de la méduse
+     */
     @Override
     public void draw(GraphicsContext context, Camera camera) {
         double frameRate = 8;
         int numFrame = (int) Math.floor(tempsEcoule * frameRate);
         verifieDirection();
-        if (estEnModeDebug){
+        //verifie si le programme est en mode déboguage
+        if (estEnModeDebug) {
             context.setFill(Color.rgb(255, 0, 0, 0.4));
-            context.fillRect(this.x, camera.calculerYCamera(this.y), 50,50);
+            context.fillRect(this.x, camera.calculerYCamera(this.y), 50, 50);
         }
         double yAffichage = camera.calculerYCamera(y);
 
@@ -81,12 +85,18 @@ public class Méduse extends GameObject {
         }
     }
 
+    /**
+     * Méthode pour update la méduse
+     * @param deltaTime Le temps écoulé depuis la dernière update
+     */
     @Override
     public void update(double deltaTime) {
+        //On vérifie quelles touches qui permettent de contrôler la méduse sont appuyées
         boolean left = Input.isKeyPressed(this.left);
         boolean right = Input.isKeyPressed(this.right);
         boolean up = Input.isKeyPressed(this.up);
 
+        //On change l'accélération en X de la méduse selon les touches gauche/droite
         if (left) {
             ax = -1200;
         } else if (right) {
@@ -102,6 +112,7 @@ public class Méduse extends GameObject {
             }
         }
 
+        //On calcule la vitesse en X de la méduse et on la cap à 175
         this.vx = vx + (ax * deltaTime);
         if (Math.abs(this.vx) > 175) {
             if (this.vx < 0) {
@@ -111,8 +122,7 @@ public class Méduse extends GameObject {
                 this.vx = 175;
             }
         }
-
-
+        //On calcule la nouvelle position en X et on s'assure que la méduse ne puisse pas sortir de l'écran
         double newX = x + (vx * deltaTime);
         if (newX > Main.WIDTH - w) {
             x = Main.WIDTH - w;
@@ -123,11 +133,17 @@ public class Méduse extends GameObject {
         } else
             x = newX;
 
+        /*Si la méduse est en collision avec une plateforme, on règle sa vitesse à 0 et sa hauteur à
+        celle de la plateforme*/
         if (enCollision && !surPlateformeVerte) {
             vy = 0;
             y = hauteurPlateforme;
             alreadyInTheAir = false;
-        } else {
+        }
+        /*Si la méduse n'est pas en collision avec une plateforme, alors on vérifie si elle est dans les airs ou non
+        (pour éviter les doubles sauts) et on update sa position et vitesse en Y*/
+
+        else {
             if (vy == 0) {
                 alreadyInTheAir = false;
             } else if (vy != 0) {
@@ -141,12 +157,16 @@ public class Méduse extends GameObject {
                 y = newY;
             }
         }
+        //Si la méduse n'est pas déjà dans les airs, alors on set va vitesse en Y à 600 vers le haut
         if (up && !alreadyInTheAir) {
             vy = -600;
         }
         this.tempsEcoule = tempsEcoule + deltaTime;
     }
 
+    /**
+     * Méthode pour vérifier dans quelle direction se déplace la méduse
+     */
     private void verifieDirection() {
         if (this.vx > 0) {
             this.vaADroite = true;
@@ -154,7 +174,4 @@ public class Méduse extends GameObject {
             this.vaADroite = false;
         }
     }
-
-
-
 }
