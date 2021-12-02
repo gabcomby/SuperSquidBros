@@ -13,6 +13,7 @@ public class Partie {
     private boolean partieEnPause = false;
     private boolean gameOver = false;
     private int numeroPlateforme = 1;
+    private boolean modeDebug;
 
     public Partie() {
         this.méduse = new Méduse();

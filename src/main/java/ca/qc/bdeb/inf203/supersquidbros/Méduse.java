@@ -3,6 +3,7 @@ package ca.qc.bdeb.inf203.supersquidbros;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 public class Méduse extends GameObject {
     protected KeyCode left = KeyCode.LEFT, right = KeyCode.RIGHT, up = KeyCode.UP;
@@ -22,7 +23,7 @@ public class Méduse extends GameObject {
         this.w = 50;
         this.h = 50;
         this.y = Main.HEIGHT - h;
-        this.x = Main.WIDTH/2;
+        this.x = Main.WIDTH / 2;
     }
 
     public void setHauteurPlateforme(double hauteurPlateforme) {
@@ -48,6 +49,10 @@ public class Méduse extends GameObject {
     @Override
     public void draw(GraphicsContext context, Camera camera) {
         verifieDirection();
+        if (estEnModeDebug){
+            context.setFill(Color.rgb(255, 0, 0, 0.4));
+            context.fillRect(this.x, camera.calculerYCamera(this.y), 50,50);
+        }
         double yAffichage = camera.calculerYCamera(y);
         if (vaADroite) {
             context.drawImage(imageSquid1Droite, x, yAffichage, w, h);
@@ -133,4 +138,5 @@ public class Méduse extends GameObject {
     public void setAlreadyInTheAir(boolean alreadyInTheAir) {
         this.alreadyInTheAir = alreadyInTheAir;
     }
+
 }

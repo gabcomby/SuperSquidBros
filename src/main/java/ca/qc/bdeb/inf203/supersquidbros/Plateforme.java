@@ -26,8 +26,13 @@ public class Plateforme extends GameObject {
 
     @Override
     public void draw(GraphicsContext context, Camera camera) {
+        if (this.estEnModeDebug && this.enCollision){
+            context.setFill(Color.YELLOW);
+        }
+        else {
+            context.setFill(couleur);
+        }
         double yCamera = camera.calculerYCamera(y);
-        context.setFill(couleur);
         context.fillRect(x, yCamera, w, h);
     }
 
