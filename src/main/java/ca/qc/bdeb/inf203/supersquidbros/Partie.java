@@ -8,7 +8,7 @@ public class Partie {
     private Camera camera = new Camera();
     private Méduse méduse;
     private ArrayList<Plateforme> listePlateforme = new ArrayList<>();
-    private Bulles[] tabBulles = new Bulles[15];
+    private ArrayList<Bulles> tabBulles = new ArrayList<>();
     private double tempsEcouleBulles = 0;
     private boolean partieEnPause = false;
     private boolean gameOver = false;
@@ -57,8 +57,8 @@ public class Partie {
             for(int i = 0; i<listePlateforme.size(); i++) {
                 listePlateforme.get(i).update(deltaTime, méduse);
             }
-            for (int i = 0; i < tabBulles.length; i++) {
-                tabBulles[i].update(deltaTime);
+            for (int i = 0; i < tabBulles.size(); i++) {
+                tabBulles.get(i).update(deltaTime);
             }
             camera.update(deltaTime, méduse);
             tempsEcouleBulles = tempsEcouleBulles + deltaTime;
@@ -76,8 +76,8 @@ public class Partie {
         for(int i = 0; i<listePlateforme.size(); i++) {
             listePlateforme.get(i).draw(context, camera);
         }
-        for (int i = 0; i < tabBulles.length; i++) {
-            tabBulles[i].draw(context,camera);
+        for (int i = 0; i < tabBulles.size(); i++) {
+            tabBulles.get(i).draw(context,camera);
         }
     }
 
@@ -147,16 +147,16 @@ public class Partie {
         double facteurRand;
         for (int i = 0; i < 5; i++) {
             facteurRand = genererPositifOuNegatif();
-            tabBulles[i] = new Bulles(basex1+(facteurRand*rnd.nextInt(21)),camera.getyCaméra());
+            tabBulles.add(new Bulles(basex1+(facteurRand*rnd.nextInt(21)),camera.getyCaméra() - Main.HEIGHT));
         }
-        for (int j = 0; j < 5; j++) {
+        /*for (int j = 0; j < 5; j++) {
             facteurRand = genererPositifOuNegatif();
-            tabBulles[5+j] = new Bulles(basex2+(facteurRand*rnd.nextInt(21)),camera.getyCaméra());
+            tabBulles[5+j] = new Bulles(basex2+(facteurRand*rnd.nextInt(21)),camera.getyCaméra() - Main.HEIGHT);
         }
         for (int k = 0; k < 5; k++) {
             facteurRand = genererPositifOuNegatif();
-            tabBulles[10+k] = new Bulles(basex3+(facteurRand*rnd.nextInt(21)),camera.getyCaméra());
-        }
+            tabBulles[10+k] = new Bulles(basex3+(facteurRand*rnd.nextInt(21)),camera.getyCaméra() - Main.HEIGHT);
+        }*/
 
     }
 

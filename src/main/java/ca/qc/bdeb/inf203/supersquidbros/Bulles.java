@@ -9,7 +9,7 @@ public class Bulles extends GameObject{
     public Bulles(double posX, double posY) {
         this.couleur = Color.rgb(0, 0, 255, 0.4);
         this.diametre = rnd.nextInt(31) + 10.0;
-        this.vy = rnd.nextInt(101) + 350.0;
+        this.vy = -(rnd.nextInt(101) + 350.0);
         this.x = posX;
         this.y = posY;
     }
@@ -23,6 +23,6 @@ public class Bulles extends GameObject{
 
     @Override
     public void update(double deltaTime) {
-        this.y = this.vy * deltaTime + y;
+        this.y = (this.vy * deltaTime) + y;
     }
 }

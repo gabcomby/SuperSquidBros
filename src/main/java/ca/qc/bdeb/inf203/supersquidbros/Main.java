@@ -39,9 +39,11 @@ public class Main extends Application {
     private boolean jeuEnPause = false;
     private AnimationTimer timer;
     private Partie partie;
-    protected Text scoreDeLaPartie = new Text("0");
+    private Text scoreDeLaPartie = new Text("0");
+    private Text gameOverText = new Text("Game Over!");
     private double scoreDeLaPartiePourFichier = 0;
     private ListView listeScore = new ListView();
+    private double compteurTempsGameOver = 0;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -81,6 +83,10 @@ public class Main extends Application {
         rootPartie.getChildren().add(canvas);
         scoreDeLaPartie.setFont(Font.font(50));
         rootPartie.setAlignment(scoreDeLaPartie, Pos.TOP_CENTER);
+        rootPartie.setAlignment(gameOverText, Pos.CENTER);
+        gameOverText.setOpacity(0);
+        gameOverText.setFont(Font.font(60));
+        rootPartie.getChildren().add(gameOverText);
         rootPartie.getChildren().add(scoreDeLaPartie);
 
         Scene scenePartie = new Scene(rootPartie, WIDTH, HEIGHT);
@@ -136,9 +142,15 @@ public class Main extends Application {
                     scoreDeLaPartiePourFichier = Math.abs(Math.round(partie.getScoreDeLaPartie()));
                     scoreDeLaPartie.setText(String.valueOf(Math.abs(Math.round(partie.getScoreDeLaPartie()))) + " px");
                 } else {
-                    lireFichier();
-                    stage.setScene(sceneClassement);
-                    timer.stop();
+                    compteurTempsGameOver = compteurTempsGameOver + deltaTime;
+                    gameOverText.setOpacity(100);
+                    if(compteurTempsGameOver >= 3) {
+                        lireFichier();
+                        stage.setScene(sceneClassement);
+                        timer.stop();
+                        compteurTempsGameOver = 0;
+                        gameOverText.setOpacity(0);
+                    }
                 }
                 context.clearRect(0, 0, WIDTH, HEIGHT);
                 partie.draw(context);
