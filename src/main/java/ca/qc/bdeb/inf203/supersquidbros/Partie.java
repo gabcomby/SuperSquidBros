@@ -87,10 +87,16 @@ public class Partie {
         verifierGameOver();
     }
 
+    /**
+     * Méthode qui dessine tous les objets dans la fenêtre Javafx
+     * @param context GraphicsContext du pane
+     */
     public void draw(GraphicsContext context) {
+        //Dessine les bulles
         for (int i = 0; i < tabBulles.size(); i++) {
             tabBulles.get(i).draw(context, camera);
         }
+        //Dessine la méduse
         méduse.draw(context, camera);
         //Dessine les plateformes
         for (int i = 0; i < listePlateforme.size(); i++) {
@@ -120,6 +126,9 @@ public class Partie {
         }
     }
 
+    /**
+     * Vérifie si la méduse tombe en bas de l'écran
+     */
     private void verifierGameOver() {
         double yCameraMeduse = camera.calculerYCamera(méduse.getY());
         if (yCameraMeduse > Main.HEIGHT)
@@ -134,6 +143,11 @@ public class Partie {
         return camera.getyCaméra();
     }
 
+    /**
+     * Méthode qui retourne un int qui représente un type de plateforme, ce chiffre est calculé en fonction des
+     * règles qui spécifient la chance de tomber sur chacun des types de plateformes
+     * @return Le ID d'un type de plateforme qui servira dans un switch
+     */
     private int pourcentagePlateformes() {
         Random rnd = new Random();
         int chiffreAleatoire = rnd.nextInt(101);
@@ -176,6 +190,7 @@ public class Partie {
         double basex2 = rnd.nextInt((int) Main.WIDTH + 1);
         double basex3 = rnd.nextInt((int) Main.WIDTH + 1);
         double facteurRand;
+        //Rentre les bulles dans le tableau
         for (int i = 0; i < 5; i++) {
             facteurRand = genererPositifOuNegatif();
             tabBulles.add(new Bulles(basex1 + (facteurRand * rnd.nextInt(21)), camera.getyCaméra() + Main.HEIGHT));

@@ -13,25 +13,27 @@ public abstract class GameObject {
     protected Random rnd = new Random();
     protected boolean estEnModeDebug = false;
 
-    public boolean isEstEnModeDebug() {
-        return estEnModeDebug;
-    }
-
     public void setEstEnModeDebug(boolean estEnModeDebug) {
         this.estEnModeDebug = estEnModeDebug;
     }
 
-    public void update(double deltaTime){
+    /**
+     * Méthode générale a tous les gameObject qui met a jour les variables physiques de l'objet en fonction du temps
+     * @param deltaTime Le temps écoulé depuis la dernière update
+     */
+    public void update(double deltaTime) {
     }
+
+    /**
+     * Méthode générale a tous les gameObject qui permet de les afficher a l'écran
+     * @param context GraphicsContext sur lequel on dessine
+     * @param camera
+     */
     public void draw(GraphicsContext context, Camera camera) {
     }
 
     public double getVx() {
         return vx;
-    }
-
-    public void setVx(double vx) {
-        this.vx = vx;
     }
 
     public double getVy() {
@@ -46,47 +48,20 @@ public abstract class GameObject {
         return ax;
     }
 
-    public void setAx(double ax) {
-        this.ax = ax;
-    }
-
     public double getAy() {
         return ay;
-    }
-
-    public void setAy(double ay) {
-        this.ay = ay;
-    }
-
-    public double getW() {
-        return w;
-    }
-
-    public void setW(double w) {
-        this.w = w;
     }
 
     public double getH() {
         return h;
     }
 
-    public void setH(double h) {
-        this.h = h;
-    }
-
     public double getY() {
         return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 
     public double getX() {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
 }

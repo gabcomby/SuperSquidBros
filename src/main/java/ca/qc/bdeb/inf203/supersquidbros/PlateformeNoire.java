@@ -11,6 +11,11 @@ public class PlateformeNoire extends Plateforme {
         this.dejaCollision = false;
     }
 
+    /**
+     * Override la méthode vide de la classe mère plateforme pour pouvoir tomber lors d'une collision
+     * @param deltaTime le temps écoulé
+     * @param m la méduse
+     */
     @Override
     public void update(double deltaTime, Méduse m) {
         if (this.enCollision) {

@@ -20,6 +20,11 @@ public class Plateforme extends GameObject {
         return enCollision;
     }
 
+    /**
+     * Méthode qui dessine la plateforme
+     * @param context GraphicsContext sur lequel on dessine
+     * @param camera Camera du jeu
+     */
     @Override
     public void draw(GraphicsContext context, Camera camera) {
         if (this.estEnModeDebug && this.enCollision) {

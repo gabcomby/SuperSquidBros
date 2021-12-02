@@ -316,7 +316,8 @@ public class Main extends Application {
             //On écrit les scores et noms dans le ListView
             for (int i = 0; i < scoresNumériques.size(); i++) {
                 int position = i + 1;
-                listeScore.getItems().add("#" + position + " -- " + listeDeNoms.get(i) + " -- " + scoresNumériques.get(i));
+                listeScore.getItems().add("#" + position + " -- " + listeDeNoms.get(i) +
+                        " -- " + scoresNumériques.get(i));
             }
         } catch (java.io.IOException e) {
             System.out.println("Erreur lors de la lecture du fichier de score!");
@@ -324,14 +325,21 @@ public class Main extends Application {
         }
     }
 
+    /***
+     * Affiche une série de plusieurs informations sur la méduse et sur ses collisions
+     */
     private void modeDebugAffichage() {
+        //Position de la méduse
         positionMeduse.setText("Position = (" + String.valueOf(Math.round(partie.getMéduse().getX()))
                 + " , " + String.valueOf(Math.round(partie.getMéduse().getY())) + ")");
+        //Vitesse de la méduse
         vitesseMeduse.setText("Vitesse = (" + String.valueOf(Math.round(partie.getMéduse().getVx())
                 + " , " + String.valueOf(Math.round(partie.getMéduse().getVy())) + ")"));
+        //Accélération de la méduse
         accelerationMeduse.setText("Accélération = (" + String.valueOf(Math.round(
                 partie.getMéduse().getAx())) + " , " + String.valueOf(Math.round(
                 partie.getMéduse().getAy())) + ")");
+        //Contacts de la méduse
         toucheLeSol.setText("Touche le sol = " + partie.getMéduse().isEnCollision());
         positionMeduse.setOpacity(100);
         vitesseMeduse.setOpacity(100);

@@ -76,7 +76,7 @@ public class Méduse extends GameObject {
             context.fillRect(this.x, camera.calculerYCamera(this.y), 50, 50);
         }
         double yAffichage = camera.calculerYCamera(y);
-
+        //Anime la méduse a 8 fps avec en fonction de la direction ou elle va
         if (vaADroite) {
             context.drawImage(imageDroite[numFrame % imageDroite.length], x, yAffichage, w, h);
         }
