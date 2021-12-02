@@ -45,6 +45,7 @@ public class Partie {
 
     public void update(double deltaTime) {
         if (!partieEnPause) {
+            enModeDebug();
             méduse.setEnCollision(false); //On reset les collisions de la méduse
 
             //On update les plateformes pour vérifier si elles sont en collision avec la méduse
@@ -181,5 +182,16 @@ public class Partie {
             facteurRand = 1;
         }
         return facteurRand;
+    }
+
+    private void enModeDebug(){
+        méduse.setEstEnModeDebug(modeDebug);
+        for (int i = 0; i < listePlateforme.size(); i++) {
+            listePlateforme.get(i).setEstEnModeDebug(modeDebug);
+        }
+    }
+
+    public Méduse getMéduse() {
+        return méduse;
     }
 }
