@@ -1,11 +1,7 @@
 package ca.qc.bdeb.inf203.supersquidbros;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-
-import java.util.Random;
-
 
 public class Plateforme extends GameObject {
 

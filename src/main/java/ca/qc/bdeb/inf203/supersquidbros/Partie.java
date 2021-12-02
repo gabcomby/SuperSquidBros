@@ -1,29 +1,24 @@
 package ca.qc.bdeb.inf203.supersquidbros;
-
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Partie {
-    private Camera camera = new Camera();
+    private Camera camera;
     private Méduse méduse;
     private ArrayList<Plateforme> listePlateforme = new ArrayList<>();
     private ArrayList<Bulles> tabBulles = new ArrayList<>();
     private double tempsEcouleBulles = 0;
-    private boolean partieEnPause = false;
-    private boolean gameOver = false;
+    private boolean gameOver;
     private int numeroPlateforme = 1;
-    private boolean modeDebug = false;
+    private boolean modeDebug;
 
     public Partie() {
+        this.camera = new Camera();
         this.gameOver = false;
         this.méduse = new Méduse();
         this.modeDebug = false;
         genererBulles();
-        camera.setyCaméra(0);
-        camera.setVy(0);
         for(int i = 0; i<4; i++) {
             creerPlateforme();
             numeroPlateforme++;
@@ -44,7 +39,6 @@ public class Partie {
      *  Créer une méthode pour créer et effacer des plateformes en temps réel*/
 
     public void update(double deltaTime) {
-        if (!partieEnPause) {
             enModeDebug();
             méduse.setEnCollision(false); //On reset les collisions de la méduse
 
@@ -81,7 +75,6 @@ public class Partie {
                 tempsEcouleBulles = 0;
             }
             verifierGameOver();
-        }
     }
 
     public void draw(GraphicsContext context) {
@@ -189,6 +182,7 @@ public class Partie {
         for (int i = 0; i < listePlateforme.size(); i++) {
             listePlateforme.get(i).setEstEnModeDebug(modeDebug);
         }
+        camera.setEnModeDebug(modeDebug);
     }
 
     public Méduse getMéduse() {

@@ -36,7 +36,6 @@ public class Main extends Application {
 
     public static final double HEIGHT = 480;
     public static final double WIDTH = 350;
-    private boolean jeuEnPause = false;
     private AnimationTimer timer;
     private Partie partie;
     private Text scoreDeLaPartie = new Text("0");
@@ -93,6 +92,7 @@ public class Main extends Application {
         rootPartie.setAlignment(gameOverText, Pos.CENTER);
         gameOverText.setOpacity(0);
         gameOverText.setFont(Font.font(60));
+        gameOverText.setFill(Color.RED);
         rootPartie.getChildren().add(gameOverText);
         rootPartie.getChildren().add(scoreDeLaPartie);
         VBox debugModeAffichage = new VBox();
@@ -104,7 +104,7 @@ public class Main extends Application {
         accelerationMeduse.setFill(Color.WHITE);
         toucheLeSol.setOpacity(0);
         toucheLeSol.setFill(Color.WHITE);
-        debugModeAffichage.getChildren().addAll(positionMeduse,vitesseMeduse,accelerationMeduse,toucheLeSol);
+        debugModeAffichage.getChildren().addAll(positionMeduse, vitesseMeduse, accelerationMeduse, toucheLeSol);
         rootPartie.setAlignment(debugModeAffichage, Pos.TOP_LEFT);
         rootPartie.getChildren().add(debugModeAffichage);
 
@@ -113,9 +113,9 @@ public class Main extends Application {
         Scene sceneMenu = new Scene(rootMenu, WIDTH, HEIGHT);
 
         boutonEnregistrer.setOnAction((e) -> {
-            if(!dejaEnregistréScore) {
+            if (!dejaEnregistréScore) {
                 String nomHighScore = textField.getText();
-                écrireFichier(nomHighScore, (int)scoreDeLaPartiePourFichier);
+                écrireFichier(nomHighScore, (int) scoreDeLaPartiePourFichier);
                 lireFichier();
                 dejaEnregistréScore = true;
             }
@@ -144,11 +144,11 @@ public class Main extends Application {
         });
 
         scenePartie.setOnKeyReleased((e) -> {
-                Input.setKeyPressed(e.getCode(), false);
+            Input.setKeyPressed(e.getCode(), false);
         });
 
         scenePartie.setOnKeyPressed((e) -> {
-            if(e.getCode() == KeyCode.T) {
+            if (e.getCode() == KeyCode.T) {
                 partie.setModeDebug(!partie.isModeDebug());
                 e.consume();
             } else {
@@ -166,33 +166,23 @@ public class Main extends Application {
                     return;
                 }
                 double deltaTime = (now - lastTime) * 1e-9;
-                if(!partie.isGameOver()) {
+                if (!partie.isGameOver()) {
                     partie.update(deltaTime);
-                    if(partie.isModeDebug()) {
-                        positionMeduse.setText("Position = (" + String.valueOf(Math.round(partie.getMéduse().getX()))
-                                + " , " + String.valueOf(Math.round(partie.getMéduse().getY())) + ")");
-                        vitesseMeduse.setText("Vitesse = (" + String.valueOf(Math.round(partie.getMéduse().getVx())
-                                + " , " + String.valueOf(Math.round(partie.getMéduse().getVy())) + ")"));
-                        accelerationMeduse.setText("Accélération = (" + String.valueOf(Math.round(
-                                partie.getMéduse().getAx())) + " , " + String.valueOf(Math.round(
-                                        partie.getMéduse().getAy())) + ")");
-                        toucheLeSol.setText("Touche le sol = " + partie.getMéduse().isEnCollision());
-                        positionMeduse.setOpacity(100);
-                        vitesseMeduse.setOpacity(100);
-                        accelerationMeduse.setOpacity(100);
-                        toucheLeSol.setOpacity(100);
+                    if (partie.isModeDebug()) {
+                        modeDebugAffichage();
                     } else {
                         positionMeduse.setOpacity(0);
                         vitesseMeduse.setOpacity(0);
                         accelerationMeduse.setOpacity(0);
                         toucheLeSol.setOpacity(0);
+                        scoreDeLaPartie.setFont(Font.font(50));
                     }
                     scoreDeLaPartiePourFichier = Math.abs(Math.round(partie.getScoreDeLaPartie()));
                     scoreDeLaPartie.setText(String.valueOf(Math.abs(Math.round(partie.getScoreDeLaPartie()))) + " px");
                 } else {
                     compteurTempsGameOver = compteurTempsGameOver + deltaTime;
                     gameOverText.setOpacity(100);
-                    if(compteurTempsGameOver >= 3) {
+                    if (compteurTempsGameOver >= 3) {
                         lireFichier();
                         stage.setScene(sceneClassement);
                         timer.stop();
@@ -205,7 +195,8 @@ public class Main extends Application {
                 lastTime = now;
             }
         };
-
+        stage.setResizable(false);
+        stage.getIcons().add(new Image("meduse1.png"));
         stage.setTitle("Super Squid Bros");
         stage.setScene(sceneMenu);
         stage.show();
@@ -233,10 +224,10 @@ public class Main extends Application {
         return rootMenu;
     }
 
-    private void écrireFichier (String nom, int score) {
+    private void écrireFichier(String nom, int score) {
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter("highscores.txt",true));
-            printWriter.write(nom+";"+score);
+            PrintWriter printWriter = new PrintWriter(new FileWriter("highscores.txt", true));
+            printWriter.write(nom + ";" + score);
             printWriter.write("\n");
             printWriter.close();
         } catch (java.io.IOException e) {
@@ -245,15 +236,15 @@ public class Main extends Application {
         }
     }
 
-    private void lireFichier () {
+    private void lireFichier() {
         try {
             listeScore.getItems().clear();
-            ArrayList<Integer>scoresNumériques = new ArrayList<>();
-            ArrayList<String>listeDeNoms = new ArrayList<>();
-            String [] tab;
+            ArrayList<Integer> scoresNumériques = new ArrayList<>();
+            ArrayList<String> listeDeNoms = new ArrayList<>();
+            String[] tab;
             BufferedReader highscoreReader = new BufferedReader(new FileReader("highscores.txt"));
             String ligne = highscoreReader.readLine();
-            while(ligne!=null) {
+            while (ligne != null) {
                 tab = ligne.split(";");
                 String nom = tab[0];
                 String score = tab[1];
@@ -265,13 +256,29 @@ public class Main extends Application {
                 ligne = highscoreReader.readLine();
             }
             highscoreReader.close();
-            for(int i = 0; i<scoresNumériques.size(); i++) {
-                int position = i+1;
+            for (int i = 0; i < scoresNumériques.size(); i++) {
+                int position = i + 1;
                 listeScore.getItems().add("#" + position + " -- " + listeDeNoms.get(i) + " -- " + scoresNumériques.get(i));
             }
         } catch (java.io.IOException e) {
             System.out.println("Erreur lors de la lecture du fichier de score!");
             System.exit(1);
         }
+    }
+
+    private void modeDebugAffichage() {
+        positionMeduse.setText("Position = (" + String.valueOf(Math.round(partie.getMéduse().getX()))
+                + " , " + String.valueOf(Math.round(partie.getMéduse().getY())) + ")");
+        vitesseMeduse.setText("Vitesse = (" + String.valueOf(Math.round(partie.getMéduse().getVx())
+                + " , " + String.valueOf(Math.round(partie.getMéduse().getVy())) + ")"));
+        accelerationMeduse.setText("Accélération = (" + String.valueOf(Math.round(
+                partie.getMéduse().getAx())) + " , " + String.valueOf(Math.round(
+                partie.getMéduse().getAy())) + ")");
+        toucheLeSol.setText("Touche le sol = " + partie.getMéduse().isEnCollision());
+        positionMeduse.setOpacity(100);
+        vitesseMeduse.setOpacity(100);
+        accelerationMeduse.setOpacity(100);
+        toucheLeSol.setOpacity(100);
+        scoreDeLaPartie.setFont(Font.font(35));
     }
 }

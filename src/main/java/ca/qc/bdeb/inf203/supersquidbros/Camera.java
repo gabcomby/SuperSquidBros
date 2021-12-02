@@ -5,11 +5,29 @@ public class Camera {
     private double vy = 0;
     private double vyTemp = 0;
     private double ay = -2;
+    private boolean enModeDebug;
+
+    public void setEnModeDebug(boolean enModeDebug) {
+        this.enModeDebug = enModeDebug;
+    }
+
+    public Camera() {
+        this.enModeDebug = false;
+        this.yCaméra = 0;
+        this.vy = 0;
+    }
 
     public void update(double deltaTime, Méduse méduse) {
-        vy = vyTemp;
-        vy += ay * deltaTime;
-        vyTemp = vy;
+        if(enModeDebug) {
+            ay = 0;
+            vy=0;
+        }
+        else {
+            ay = -2;
+            vy = vyTemp;
+            vy += ay * deltaTime;
+            vyTemp = vy;
+        }
         yCaméra += deltaTime * vy;
         if (calculerYCamera(méduse.getY()) < (Main.HEIGHT / 4)) {
             if (méduse.getVy() < 0)

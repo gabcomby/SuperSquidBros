@@ -135,8 +135,6 @@ public class Méduse extends GameObject {
         }
     }
 
-    public void setAlreadyInTheAir(boolean alreadyInTheAir) {
-        this.alreadyInTheAir = alreadyInTheAir;
-    }
+
 
 }
