@@ -6,14 +6,30 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 public class Méduse extends GameObject {
-    protected KeyCode left = KeyCode.LEFT, right = KeyCode.RIGHT, up = KeyCode.UP;
-    protected Image imageSquid1Droite = new Image("meduse1.png");
-    protected Image imageSquid1Gauche = new Image("meduse1-g.png");
-    protected boolean vaADroite = true;
-    protected boolean alreadyInTheAir = false;
-    protected boolean enCollision = false;
-    protected double hauteurPlateforme;
-    protected boolean surPlateformeVerte = false;
+    private KeyCode left = KeyCode.LEFT, right = KeyCode.RIGHT, up = KeyCode.UP;
+    private Image imageSquid1Droite = new Image("meduse1.png");
+    private Image imageSquid2Droite = new Image("meduse2.png");
+    private Image imageSquid3Droite = new Image("meduse3.png");
+    private Image imageSquid4Droite = new Image("meduse4.png");
+    private Image imageSquid5Droite = new Image("meduse5.png");
+    private Image imageSquid6Droite = new Image("meduse6.png");
+    private Image imageSquid1Gauche = new Image("meduse1-g.png");
+    private Image imageSquid2Gauche = new Image("meduse2-g.png");
+    private Image imageSquid3Gauche = new Image("meduse3-g.png");
+    private Image imageSquid4Gauche = new Image("meduse4-g.png");
+    private Image imageSquid5Gauche = new Image("meduse5-g.png");
+    private Image imageSquid6Gauche = new Image("meduse6-g.png");
+    private Image[] imageDroite = {imageSquid1Droite,imageSquid2Droite,imageSquid3Droite,imageSquid4Droite,
+            imageSquid5Droite,imageSquid6Droite};
+    private Image[] imageGauche = {imageSquid1Gauche,imageSquid2Gauche,imageSquid3Gauche,imageSquid4Gauche,
+            imageSquid5Gauche,imageSquid6Gauche};
+
+    private boolean vaADroite = true;
+    private boolean alreadyInTheAir = false;
+    private boolean enCollision = false;
+    private double hauteurPlateforme;
+    private boolean surPlateformeVerte = false;
+    private double tempsEcoule = 0;
 
     public Méduse() {
         this.vx = 0;
@@ -48,17 +64,20 @@ public class Méduse extends GameObject {
 
     @Override
     public void draw(GraphicsContext context, Camera camera) {
+        double frameRate = 8;
+        int numFrame = (int) Math.floor(tempsEcoule * frameRate);
         verifieDirection();
         if (estEnModeDebug){
             context.setFill(Color.rgb(255, 0, 0, 0.4));
             context.fillRect(this.x, camera.calculerYCamera(this.y), 50,50);
         }
         double yAffichage = camera.calculerYCamera(y);
+
         if (vaADroite) {
-            context.drawImage(imageSquid1Droite, x, yAffichage, w, h);
+            context.drawImage(imageDroite[numFrame % imageDroite.length], x, yAffichage, w, h);
         }
         if (!vaADroite) {
-            context.drawImage(imageSquid1Gauche, x, yAffichage, w, h);
+            context.drawImage(imageGauche[numFrame % imageGauche.length], x, yAffichage, w, h);
         }
     }
 
@@ -125,6 +144,7 @@ public class Méduse extends GameObject {
         if (up && !alreadyInTheAir) {
             vy = -600;
         }
+        this.tempsEcoule = tempsEcoule + deltaTime;
     }
 
     private void verifieDirection() {
