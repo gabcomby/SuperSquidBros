@@ -53,6 +53,7 @@ public class Main extends Application {
     private Text vitesseMeduse = new Text("Vitesse = (0,0)");
     private Text accelerationMeduse = new Text("Acceleration = (0,0)");
     private Text toucheLeSol = new Text("Touche le sol = oui");
+    private HBox entrerNom;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -81,7 +82,7 @@ public class Main extends Application {
         Text meilleursScore = new Text("Meilleurs score!");
         meilleursScore.setFont(Font.font(50));
         //La HBox contenant les éléments pour enregistrer notre score
-        HBox entrerNom = new HBox();
+        entrerNom = new HBox();
         entrerNom.setAlignment(Pos.CENTER);
         Text nom = new Text("Nom : ");
         rootClassement.setAlignment(Pos.CENTER);
@@ -148,6 +149,9 @@ public class Main extends Application {
         //Bouton pour aller au menu des High Score
         classement.setOnAction((e) -> {
             lireFichier();
+            //Si on va vers le menu des classements directement, on ne peut pas enregistrer un nouveau score
+            entrerNom.setVisible(false);
+            dejaEnregistréScore = true;
             stage.setScene(sceneClassement);
         });
 
@@ -157,6 +161,7 @@ public class Main extends Application {
             scoreDeLaPartie.setText("0 px");
             scoreDeLaPartiePourFichier = 0;
             dejaEnregistréScore = false;
+            entrerNom.setVisible(true);
             stage.setScene(scenePartie);
             timer.start();
         });
@@ -171,12 +176,22 @@ public class Main extends Application {
             Input.setKeyPressed(e.getCode(), false);
         });
 
+        //Si on appuie sur ESCAPE sur le menu, alors on quitte le programme
+        sceneMenu.setOnKeyPressed((e) -> {
+            if(e.getCode() == KeyCode.ESCAPE)
+                Platform.exit();
+        });
+
         //On rajoute les touches appuyées à la liste des touches
         scenePartie.setOnKeyPressed((e) -> {
             //Si la touche est T, alors on active le debug mode et on consume l'event pour éviter la redondance
             if (e.getCode() == KeyCode.T) {
                 partie.setModeDebug(!partie.isModeDebug());
                 e.consume();
+            }
+            //Si la touche ESCAPE est appuyée, alors on met GameOver à true
+            else if (e.getCode() == KeyCode.ESCAPE) {
+                partie.setGameOver(true);
             } else {
                 Input.setKeyPressed(e.getCode(), true);
             }

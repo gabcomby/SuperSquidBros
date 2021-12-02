@@ -27,6 +27,10 @@ public class Partie {
         }
     }
 
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
     public boolean isModeDebug() {
         return modeDebug;
     }
