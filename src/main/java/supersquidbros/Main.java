@@ -1,4 +1,4 @@
-package ca.qc.bdeb.inf203.supersquidbros;
+package supersquidbros;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;

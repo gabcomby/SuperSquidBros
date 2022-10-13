@@ -1,4 +1,4 @@
-package ca.qc.bdeb.inf203.supersquidbros;
+package supersquidbros;
 
 public class Camera {
     private double yCaméra;

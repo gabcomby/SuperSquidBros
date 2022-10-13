@@ -1,4 +1,4 @@
-package ca.qc.bdeb.inf203.supersquidbros;
+package supersquidbros;
 
 import javafx.scene.input.KeyCode;
 

@@ -17,4 +17,4 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.media' ]
 }
 
-mainClassName = 'ca.qc.bdeb.inf203.supersquidbros.Main'
+mainClassName = 'supersquidbros.Main'
