@@ -2,7 +2,7 @@
 This program is a physics based auto-scroller game in which a player must jump from platform to platform to avoid getting caught by the bottom of the scrolling screen. Different platforms are available, such as bouncy, trampoline like platforms, platforms that move from left to right in an unpredictable manner and platforms that fall down once you've landed on them. The higher the players goes in the level, the faster the scrolling becomes. Every level is unique, since they are procedurally generated each game. A file system to save high scores locally also exists.
 
 # Developers
-This project was developed by [@GabrielC-34](https://github.com/GabrielC-34) and [@GuilhemDM](https://github.com/GuilhemDM).
+This project was developed by [@gabcomby](https://github.com/gabcomby) and [@GuilhemDM](https://github.com/GuilhemDM).
 
 # Technologies and libraries
 This program uses the following Java libraries :
